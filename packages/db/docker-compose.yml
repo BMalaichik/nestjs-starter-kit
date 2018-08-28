@@ -1,0 +1,9 @@
+postgres:
+  build: .
+  container_name: app-db
+  environment:
+    - APP_PASS=password
+  ports:
+    - '5432:5432'
+  volumes:
+    - './docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d'

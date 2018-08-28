@@ -1,0 +1,25 @@
+version: "2"
+services:
+  app.backend:
+    container_name: app-backend
+    restart: always
+    build: .
+    ports:
+     - 4101:4101
+    environment:
+      - NODE_ENV
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+      - AWS_DEFAULT_REGION
+      - AWS_REGION
+      - AWS_CLOUDWATCH_GROUP
+    depends_on:
+     - db
+
+  db:
+    image: app/db
+    restart: always
+    ports:
+     - 5432:5432
+    environment:
+     - APP_PASS=password

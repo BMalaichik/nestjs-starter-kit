@@ -1,0 +1,117 @@
+version: 2
+jobs:
+  build_backend:
+    docker:
+      - image: circleci/node:8.11.1
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "packages/backend/package-lock.json" }}
+      - run: cd packages/backend && npm i
+      - save_cache:
+          key: v1-dependencies-{{ checksum "packages/backend/package-lock.json" }}
+          paths:
+            - ./packages/backend/node_modules
+      - run:
+          name: Tests execution
+          command: cd packages/backend && npm test
+
+  build_frontend:
+    docker:
+      - image: circleci/node:8.11.1
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "packages/frontend/package-lock.json" }}
+      - run: cd packages/frontend && npm i
+      - save_cache:
+          key: v1-dependencies-{{ checksum "packages/frontend/package-lock.json" }}
+          paths:
+            - ./packages/frontend/node_modules
+      - run:
+          name: Tests execution
+          command: cd packages/frontend && npm test
+  
+  build_all:
+    docker:
+      - image: circleci/node:8.11.1
+    steps:
+      - run:
+          name: Verify builds succeeded
+          command: echo "Builds succeeded!"
+
+  deploy_backend:
+    docker:
+      - image: circleci/node:8.11.1
+    environment:
+      NODE_ENV: production
+    steps:
+      - checkout
+      - add_ssh_keys
+      - setup_remote_docker
+      - run:
+          name: Deploying backend
+          command: |
+            docker login -u $DOCKER_USER -p $DOCKER_PASS
+            cd packages/backend && npm run deploy:prod
+
+  deploy_frontend:
+    docker:
+      - image: circleci/node:8.11.1
+    environment:
+      NODE_ENV: production
+    steps:
+      - checkout
+      - add_ssh_keys
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "packages/frontend/package-lock.json" }}
+      - run: cd packages/frontend && npm i
+      - run:
+          name: Bundling app ...
+          command: |
+            cd packages/frontend && npm run build
+      - setup_remote_docker
+      - run:
+          name: Deploying frontend
+          command: |
+            docker login -u $DOCKER_USER -p $DOCKER_PASS
+            cd packages/frontend && npm run deploy:prod
+            
+  deploy:
+    machine:
+        enabled: true
+    steps:
+      - run:
+          name: Deploy App
+          command: echo "Succeeded"
+    
+
+workflows:
+  version: 2
+  build_test_deploy:
+    jobs:
+      - build_backend
+      - build_frontend
+      - build_all:
+          requires:
+            - build_backend
+            - build_frontend
+      - deploy_backend:
+          requires:
+            - build_all
+          filters:
+            branches:
+              only: master
+      - deploy_frontend:
+          requires:
+            - build_all
+          filters:
+            branches:
+              only: master
+      - deploy:
+          requires:
+            - deploy_frontend
+            - deploy_backend

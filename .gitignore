@@ -1,0 +1,25 @@
+#Exclude tsc generated files
+dist
+js/*.map
+js/ts.js
+*.d.ts
+
+#
+docker-compose.override.yml
+
+# dependencies
+node_modules
+
+# IDE
+/.idea
+/.awcache
+/.vscode
+
+# log
+*.log
+*.logs
+
+
+# tests
+/coverage
+/.nyc_output

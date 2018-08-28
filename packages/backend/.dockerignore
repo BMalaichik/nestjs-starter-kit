@@ -1,0 +1,12 @@
+dist
+node_modules
+.dockerignore
+.editorconfig
+.gitattributes
+.gitignore
+.circle
+CHANGELOG.md
+docker-compose.yml
+Dockerfile
+Dockerfile.docs
+README.md

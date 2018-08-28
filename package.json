@@ -1,0 +1,24 @@
+{
+  "name": "app",
+  "version": "1.0.0",
+  "description": "app",
+  "main": "index.js",
+  "author": "BMalaichik <boris.malaichik@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "cross-env": "^5.1.4",
+    "lerna": "2.11.0"
+  },
+  "scripts": {
+    "precommit": "lerna run precommit",
+    "test": "lerna run test --concurrency 1 --stream",
+    "postinstall": "lerna bootstrap",
+    "start": "lerna run start",
+    "start:prod": "lerna run start:prod",
+    "deploy:prod": "lerna run deploy:prod --stream"
+  },
+  "devDependencies": {
+    "husky": "^0.14.3"
+  }
+}

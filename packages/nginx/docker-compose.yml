@@ -1,0 +1,14 @@
+version: "2"
+services:
+  app.nginx:
+    image: nginx
+    container_name: app-nginx
+    build: .
+    volumes:
+     - 'app_www:/usr/share/nginx/www'
+    ports:
+     - 3000:80
+
+volumes:
+  app_www:
+    external: true
