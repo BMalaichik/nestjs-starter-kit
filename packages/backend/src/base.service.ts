@@ -22,7 +22,7 @@ export abstract class BaseService {
     public async updateBy<T extends BaseDto>(
         repository,
         model: typeof Model,
-        entity: BaseDto,
+        entity: Partial<T>,
         matchField = "id",
         returning = false,
         fields?: (keyof T)[],

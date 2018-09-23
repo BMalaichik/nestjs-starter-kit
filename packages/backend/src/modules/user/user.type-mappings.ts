@@ -1,6 +1,6 @@
 import * as _ from "lodash";
 
-import { UserDto } from "./user.dto";
+import { UserDto } from "./dto";
 import { TypeMapper } from "../shared";
 import { ContactDto } from "../contact";
 import { User, Contact } from "../db";

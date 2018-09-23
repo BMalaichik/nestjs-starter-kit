@@ -2,7 +2,7 @@ import * as _ from "lodash";
 
 import { LoggerDiToken } from "./logger.di";
 import { LoggerService } from "./logger.service";
-import { ConfigDiToken, Config } from "../config";
+import { ConfigDiToken, Config, Env } from "../config";
 
 // TODO: define logger-factory, using pino.child with extra property add
 export const loggerProviders = [
@@ -11,7 +11,7 @@ export const loggerProviders = [
         useFactory: async (config: Config) => {
             const opts = _.assign(
                 {},
-                config.NODE_ENV === "production" ?
+                config.env === Env.PRODUCTION ?
                     {} :
                     {
                         prettyPrint: {

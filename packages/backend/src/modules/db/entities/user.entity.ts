@@ -55,6 +55,12 @@ export class User extends Model<User> {
     passwordHash: string;
 
     @Column({
+        type: DataType.STRING,
+        allowNull: false,
+    })
+    username: string;
+
+    @Column({
         type: DataType.INTEGER,
         allowNull: false,
     })

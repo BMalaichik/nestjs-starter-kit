@@ -1,5 +1,10 @@
+export enum Env {
+    DEVELOPMENT = "development",
+    PRODUCTION = "production",
+}
+
 export interface Config {
-    NODE_ENV?: string;
+    env?: Env;
     db?: {
         host: string,
         username: string;
@@ -16,10 +21,16 @@ export interface Config {
     app?: {
         logRequests?: boolean,
         adminEmail?: string[];
+        url?: string;
     };
     auth?: {
         tokenSecret: string;
         tokenExpiration: number; // seconds
+        inviteTokenSecret: string;
+        inviteTokenExpiration: number;
+        resetPasswordTokenSecret: string;
+        resetPasswordTokenExpiration: number;
+        longTokenExpiration: number; // seconds
     };
     mailgun?: {
         apiKey: string;

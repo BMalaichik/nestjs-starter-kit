@@ -16,10 +16,10 @@ import {
 } from "@nestjs/common";
 
 import { Roles } from "../../http/decorators";
-import { UserDto } from "./user.dto";
+import { UserDto } from "./dto";
+import { UserRole } from "../db";
 import { UserDiToken } from "./user.di";
 import { AuthorizeGuard } from "../../http/guards";
-import { User, UserRole } from "../db";
 import { UserService, UserStatus } from "./user.service";
 
 
@@ -42,7 +42,7 @@ export class UserController {
     }
 
     @Post("")
-    public create(@Body() user: User): Promise<UserDto> {
+    public create(@Body() user: UserDto): Promise<UserDto> {
         return this.userService.create(user);
     }
 

@@ -1,6 +1,7 @@
-import { Config } from "../config.interfaces";
+import { Config, Env } from "../config.interfaces";
 
 const config: Config = {
+    env: Env.DEVELOPMENT,
     db: {
         host: "db",
         username: "postgres",
@@ -16,10 +17,16 @@ const config: Config = {
     },
     app: {
         logRequests: true,
+        url: "localhost:4101",
     },
     auth: {
-        tokenExpiration: 60 * 60 * 60,
-        tokenSecret: "324t5gervfnh2w3pio5uj23kt'phnjwoiUGAHFRUIrhnsj'pdtu0928y4rf'rhw9u",
+        tokenExpiration: 60 * 60 * 24, // 1 day
+        longTokenExpiration: 60 * 60 * 24 * 7 , // 1 week
+        inviteTokenExpiration: 60 * 60, // 1 hour
+        tokenSecret: "235t3ouiwrghjnme;owlfhu34o8trfnwof32pi4t2poghn5t8ogh3eigj",
+        inviteTokenSecret: "f34t6ergdsefgert2we;AWRsadf12rewfsads",
+        resetPasswordTokenExpiration: 60 * 60,
+        resetPasswordTokenSecret: "fASJfs234rHjkmnXqk324;lm,Xkjade",
     },
 };
 

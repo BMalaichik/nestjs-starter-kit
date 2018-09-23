@@ -2,10 +2,17 @@ import { UserRole } from "../db";
 
 
 export interface UserLoginDto {
-    email: string;
+    username: string;
     password: string;
+    rememberMe?: boolean;
 }
 
+export class ResendInviteDto {
+    username?: string;
+    email?: string;
+}
+
+export class ResetPasswordDto extends ResendInviteDto {}
 
 export interface JwtUserData {
     id: number;
