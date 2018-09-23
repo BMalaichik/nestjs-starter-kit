@@ -1,9 +1,6 @@
 import { Get, Controller, Inject } from "@nestjs/common";
 
 import { Config, ConfigDiToken } from "./modules/config";
-import { DbDiToken } from "./modules/db/db.di";
-import { ValidatorService } from "./modules/shared/validator";
-import { NotNilValidator, NotEmptyValidator, SampleAsynclValidator } from "./modules/shared/validator/base";
 
 
 @Controller()

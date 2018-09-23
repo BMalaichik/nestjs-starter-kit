@@ -7,6 +7,7 @@ import {
     User,
     Contact,
     File,
+    Product
 } from "./entities";
 
 
@@ -23,6 +24,10 @@ const repositoryProviders = [
         provide: DbDiToken.FILE_REPOSITORY,
         useValue: File,
     },
+    {
+        provide: DbDiToken.PRODUCTS_REPOSITORY,
+        useValue: Product,
+    },
 ];
 
 export const dbProviders = [
@@ -35,7 +40,8 @@ export const dbProviders = [
                 [
                     Contact,
                     User,
-                    File
+                    File,
+                    Product
                 ],
             );
 

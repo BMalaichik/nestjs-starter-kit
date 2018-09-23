@@ -2,7 +2,7 @@
 echo "Checking if APP_PASS var is set"
 
 if [ -z ${APP_PASS} ]; then
-    echo "Environmetn variable APP_PASS must be set";
+    echo "Environment variable APP_PASS must be set";
     exit 1;
 fi
 

@@ -12,6 +12,7 @@ import { Config, ConfigModule, ConfigDiToken } from "./modules/config";
 import { FileModule } from "./modules/file";
 import { LoggerModule } from "./modules/logger";
 import { ContactModule } from "./modules/contact";
+import { ProductModule } from "./modules/product";
 
 
 @Module({
@@ -26,6 +27,7 @@ import { ContactModule } from "./modules/contact";
       SharedModule,
       LoggerModule,
       ContactModule,
+      ProductModule
     ],
   controllers: [AppController],
   components: [],

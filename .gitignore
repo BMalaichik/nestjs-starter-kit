@@ -3,6 +3,7 @@ dist
 js/*.map
 js/ts.js
 *.d.ts
+requirements.md
 
 #
 docker-compose.override.yml
