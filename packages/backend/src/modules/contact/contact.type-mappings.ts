@@ -1,14 +1,20 @@
+import * as _ from "lodash";
 import { Contact } from "../db";
 import { TypeMapper } from "../shared";
-import { ContactDto } from "./contact.dto";
+import { ContactDto, splitFullNameSafe, getFullNameSafe } from "./contact.dto";
 
 
 export function register(mapper: TypeMapper) {
     mapper.register(Contact, ContactDto, (contact: Contact) => {
-        return new ContactDto({ ...contact });
+        const name: string = getFullNameSafe(contact.firstName, contact.lastName);
+
+        return new ContactDto({ ...contact, name });
     });
 
     mapper.register(ContactDto, Contact, (contact: ContactDto) => {
-        return new Contact({ ...contact });
+        const [firstName, lastName] = splitFullNameSafe(contact.name);
+        const data = _.assign({}, contact, { firstName, lastName });
+
+        return new Contact(data);
     });
 }

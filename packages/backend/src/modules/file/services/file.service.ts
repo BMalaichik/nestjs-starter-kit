@@ -1,4 +1,4 @@
-import { Component, Inject, ForbiddenException } from "@nestjs/common";
+import { Injectable, Inject, ForbiddenException } from "@nestjs/common";
 
 import * as _ from "lodash";
 import { ReadStream } from "fs";
@@ -37,7 +37,7 @@ export interface FileParams {
     dealId: number;
 }
 
-@Component()
+@Injectable()
 export class FileService extends BaseService {
 
     public constructor(
@@ -146,17 +146,25 @@ export class FileService extends BaseService {
         const secureFileLookupOptions: WhereOptions<File> = await this.permissionService.getFilePermissionContext(fileLookupWhereOptions);
 
         const files: File[] = await this.repository.findAll({ where: secureFileLookupOptions });
-        const filesDtos: FileDto[] = _.map(files, (file: File) => this.typeMapper.map(File, FileDto, file));
+        const filesDtos: FileDto[] = _.map(files, (file: File) => this.typeMapper.map(File, FileDto, file.toJSON()));
 
         if (files.length !== ids.length) {
-            throw new ForbiddenException(`File delete unauthorized attemp`);
+            throw new ForbiddenException(`File delete unauthorized attempt`);
         }
 
-
         await this.multipleDestroyBy(this.repository, ids);
-        const keys: string[] = _.map(filesDtos, file => this.configFactory.getKey(this.configFactory.getStoragePath(file), file.name));
+        await this.storage.multipleDelete(this.configFactory.getMultipleDeleteConfiguration(_.map(filesDtos, file => file.key)));
+    }
 
-        await this.storage.multipleDelete(this.configFactory.getMultipleDeleteConfiguration(keys));
+    /**
+     *  Updates files records, fields: title, description
+     */
+    public async multipleUpdate(files: FileDto[]): Promise<FileDto[]> {
+        const updatedFiles: File[] = await Promise.map(files, file => {
+            return this.updateBy<File>(this.repository, File, file, "id", true, ["title", "description"]);
+        }) as File[];
+
+        return _.map(updatedFiles, file => this.typeMapper.map(File, FileDto, file));
     }
 
     public getDirectUrl(file: FileDto): string {
@@ -176,8 +184,6 @@ export class FileService extends BaseService {
     }
 
     private async getFileUploadPermissionContext(params: { type: FileType; dealId: number }): Promise<PermissionContext> {
-        // *note*: based on file type & upload optios, specfic client & deparment ids can be specified.
-        // TODO: define file context on demand
         return {};
     }
 }

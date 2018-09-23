@@ -1,14 +1,14 @@
-import { Component, Inject } from "@nestjs/common";
+import { Injectable, Inject } from "@nestjs/common";
 
 import * as uuid from "uuid";
 import { S3 } from "aws-sdk";
 
 import { FileType } from "../../db";
-import { ConfigDiToken, Config } from "../../config";
 import { PermissionContext } from "../../auth";
+import { ConfigDiToken, Config } from "../../config";
 
 
-@Component()
+@Injectable()
 export class S3FileStorageConfigurationFactory {
 
     public constructor(
@@ -62,7 +62,7 @@ export class S3FileStorageConfigurationFactory {
      *  Returns storage path: doesn't include filename & upload prefix
      */
     public getStoragePath(file: { context: PermissionContext, type: FileType }): string {
-        return `client/${file.context.clientId}/${file.type}/`;
+        return `${file.type}/`;
     }
 
     /**

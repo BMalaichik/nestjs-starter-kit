@@ -3,7 +3,7 @@ import { Global, Module } from "@nestjs/common";
 
 @Global()
 @Module({
-    components: [],
+    providers: [],
     exports: [],
 })
 export class GlobalModule {

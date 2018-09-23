@@ -1,7 +1,6 @@
-import { Component, Inject, ForbiddenException } from "@nestjs/common";
+import { Inject, ForbiddenException, Injectable } from "@nestjs/common";
 
 import * as _ from "lodash";
-import { WhereOptions, AnyWhereOptions } from "sequelize";
 
 import { File } from "../../db";
 import { BaseService } from "../../../base.service";
@@ -11,11 +10,11 @@ import { CurrentUserService } from "./current-user.service";
 
 
 export interface PermissionContext {
-    
+
 }
 
 
-@Component()
+@Injectable()
 export class PermissionService extends BaseService {
 
     public constructor(
@@ -31,7 +30,6 @@ export class PermissionService extends BaseService {
             throw new ForbiddenException(`No current user resolved for permission context request`);
         }
 
-        // TODO: define file context on demand
         return opts;
     }
 }

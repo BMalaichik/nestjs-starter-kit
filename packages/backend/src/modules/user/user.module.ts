@@ -1,4 +1,4 @@
-import { Module, NestModule, MiddlewaresConsumer, forwardRef, Inject } from "@nestjs/common";
+import { Module, NestModule, MiddlewareConsumer, forwardRef, Inject } from "@nestjs/common";
 
 import { DbModule } from "../db";
 import { AuthModule } from "../auth";
@@ -22,7 +22,7 @@ import { SharedModule, TypeMapperDiToken, TypeMapper } from "../shared";
         ConfigModule,
     ],
     controllers: [UserController],
-    components: [...userProviders],
+    providers: [...userProviders],
     exports: [...userProviders],
 })
 export class UserModule implements NestModule {
@@ -32,7 +32,7 @@ export class UserModule implements NestModule {
         registerTypeMappings(mapper);
     }
 
-    public configure(consumer: MiddlewaresConsumer): void | MiddlewaresConsumer {
+    public configure(consumer: MiddlewareConsumer): void | MiddlewareConsumer {
 
     }
 }

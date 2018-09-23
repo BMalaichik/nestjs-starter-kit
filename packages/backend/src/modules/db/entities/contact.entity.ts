@@ -1,4 +1,3 @@
-import * as _ from "lodash";
 import { Model, Table, Column, DataType, UpdatedAt, CreatedAt } from "sequelize-typescript";
 
 
@@ -6,26 +5,43 @@ import { Model, Table, Column, DataType, UpdatedAt, CreatedAt } from "sequelize-
     tableName: "contact",
 })
 export class Contact extends Model<Contact> {
+    public static PUBLIC_ATTRIBUTES: (keyof Contact)[] = [
+        "firstName",
+        "lastName",
+        "phone",
+        "address",
+        "title",
+        "cell",
+        "home",
+        "ssn",
+        "fax",
+        "email",
+        "dateOfBirth",
+        "city",
+        "state",
+        "zip",
+        "country",
+    ];
 
     public id: number;
 
     @Column({
-        type: DataType.STRING(20),
+        type: DataType.STRING,
     })
     public phone: string;
 
     @Column({
-        type: DataType.STRING(20),
+        type: DataType.STRING,
     })
     public cell: string;
 
     @Column({
-        type: DataType.STRING(100),
+        type: DataType.STRING,
     })
     public home: string;
 
     @Column({
-        type: DataType.STRING(20),
+        type: DataType.STRING,
     })
     public fax: string;
 
@@ -56,35 +72,35 @@ export class Contact extends Model<Contact> {
     @Column({
         type: DataType.STRING(100),
     })
-    lastName: string;
+    public lastName: string;
 
     @Column({
-        type: DataType.STRING(100),
+        type: DataType.STRING,
     })
     public city: string;
 
     @Column({
-        type: DataType.STRING(20),
+        type: DataType.STRING,
     })
     public zip: string;
 
     @Column({
-        type: DataType.STRING(100),
+        type: DataType.STRING,
     })
     public state: string;
 
     @Column({
-        type: DataType.STRING(100),
+        type: DataType.STRING,
     })
     public ssn: string;
 
     @Column({
-        type: DataType.CHAR(3),
+        type: DataType.STRING,
     })
     public country: string;
 
     @Column({
-        type: DataType.STRING(100),
+        type: DataType.STRING,
     })
     public address: string;
 

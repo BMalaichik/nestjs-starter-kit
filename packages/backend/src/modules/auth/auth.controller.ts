@@ -5,8 +5,8 @@ import {
     Body,
     Post,
     UseGuards,
-    Delete,
     UseFilters,
+    HttpStatus,
 } from "@nestjs/common";
 
 
@@ -27,15 +27,10 @@ export class AuthController {
         @Inject(AuthDiToken.AUTH_SERVICE) private readonly authService: AuthService,
     ) {}
 
-    @HttpCode(200)
+    @HttpCode(HttpStatus.OK)
     @Post("/login")
     @Public()
-    public async getToken(@Body() userInfo: UserLoginDto): Promise<{ token: string }> {
+    public async login(@Body() userInfo: UserLoginDto): Promise<{ token: string }> {
         return this.authService.login(userInfo);
-    }
-
-    @HttpCode(200)
-    @Delete("/logout")
-    public async deleteToken(): Promise<void> {
     }
 }

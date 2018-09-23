@@ -1,5 +1,5 @@
 import * as clsBluebird from "cls-bluebird";
-import { createNamespace, getNamespace as getClsNamespace } from "continuation-local-storage";
+import { createNamespace, getNamespace as getClsNamespace } from "cls-hooked";
 
 
 const APP_CONTINUATION_KEY = "app-continuation-key";

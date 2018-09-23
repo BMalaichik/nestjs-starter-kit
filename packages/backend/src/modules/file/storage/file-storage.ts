@@ -1,10 +1,10 @@
 import { S3 } from "aws-sdk";
-import { Component, Inject } from "@nestjs/common";
+import { Injectable, Inject } from "@nestjs/common";
 
 import { FileDiToken } from "../file.di";
 
 
-@Component()
+@Injectable()
 export class S3FileStorage {
 
     public constructor(

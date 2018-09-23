@@ -1,5 +1,5 @@
 import * as _ from "lodash";
-import { Component, Inject } from "@nestjs/common";
+import { Injectable, Inject } from "@nestjs/common";
 import { IFindOptions } from "sequelize-typescript";
 
 import { UserDto } from "./user.dto";
@@ -20,7 +20,7 @@ export enum UserStatus {
     INACTIVE = "inactive",
 }
 
-@Component()
+@Injectable()
 export class UserService extends BaseService {
 
     public constructor(
@@ -40,7 +40,7 @@ export class UserService extends BaseService {
                 {
                     model: Contact,
                     as: "contact",
-                }
+                },
             ],
         };
         const users = await this.repository.findAll(findOptions);
@@ -95,7 +95,7 @@ export class UserService extends BaseService {
         );
         const payload: EmailPayload = {
             to: this.config.app.adminEmail,
-            subject: `Application Platform User registration`,
+            subject: `App Platform User registration`,
             text: `
                 New User ${contact.firstName} ${contact.lastName} has been successfully created!
                 Login: ${createdUser.contact.email}

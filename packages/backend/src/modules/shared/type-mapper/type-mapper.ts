@@ -1,3 +1,5 @@
+import { Model } from "sequelize-typescript";
+
 import { TypeMapperException } from "./exceptions/type-mapper.exception";
 
 
@@ -45,7 +47,10 @@ export class TypeMapper {
             return;
         }
 
-        return mapper(value, opts);
+        // handling passing Sequelize Instance value, reducing call's `.toJSON()`
+        const entityValue = value instanceof Model ? value.toJSON() : value;
+
+        return mapper(entityValue, opts);
     }
 
     private static validateType<T>(t: Constructor<T>): void {

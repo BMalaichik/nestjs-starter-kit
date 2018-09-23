@@ -1,18 +1,20 @@
 import * as _ from "lodash";
 import { Reflector } from "@nestjs/core";
 import { Observable } from "rxjs/Observable";
-import { CanActivate, Guard, ExecutionContext } from "@nestjs/common";
+import { CanActivate, ExecutionContext, Injectable } from "@nestjs/common";
 
 import { UserRole } from "../../modules/db";
 import { ROLES_METADATA_TOKEN, PUBLIC_METADATA_TOKEN } from "../decorators";
 
 
-@Guard()
+@Injectable()
 export class AuthorizeGuard implements CanActivate {
     constructor(private readonly reflector: Reflector) {}
 
-    public canActivate(request: any, context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
-        const isPublic = this.reflector.get<boolean>(PUBLIC_METADATA_TOKEN, context.handler);
+    public canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
+        const request = context.switchToHttp().getRequest();
+        const handler = context.getHandler();
+        const isPublic = this.reflector.get<boolean>(PUBLIC_METADATA_TOKEN, handler);
 
         if (isPublic) {
             return true;
@@ -22,7 +24,7 @@ export class AuthorizeGuard implements CanActivate {
             return false;
         }
 
-        const requestedRoles: UserRole[] = this.reflector.get<UserRole[]>(ROLES_METADATA_TOKEN, context.handler);
+        const requestedRoles: UserRole[] = this.reflector.get<UserRole[]>(ROLES_METADATA_TOKEN, handler);
         const userAvailableRoles: UserRole[] = _.get(request, "user.roles", []);
 
         if (userAvailableRoles.length === 0) {

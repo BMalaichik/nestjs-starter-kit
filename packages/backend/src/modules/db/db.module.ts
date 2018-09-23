@@ -6,7 +6,7 @@ import { ConfigModule, configProviders } from "../config";
 
 @Module({
     imports: [ConfigModule],
-    components: [...dbProviders, ...configProviders],
+    providers: [...dbProviders, ...configProviders],
     exports: [...dbProviders],
 })
 export class DbModule {
@@ -15,7 +15,7 @@ export class DbModule {
 
         return {
             module: DbModule,
-            components: providers,
+            providers,
             exports: providers,
         };
     }

@@ -1,4 +1,4 @@
-import { Inject, Component } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 
 import * as passport from "passport";
 import { ExtractJwt, Strategy } from "passport-jwt";
@@ -8,7 +8,7 @@ import { AuthDiToken } from "./auth.di";
 import { Config, ConfigDiToken } from "../config";
 
 
-@Component()
+@Injectable()
 export class JwtStrategy extends Strategy {
 
     public constructor(

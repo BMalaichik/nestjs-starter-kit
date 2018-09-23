@@ -15,14 +15,7 @@ import { ForeignKeyOption } from "../utils";
 
 
 export enum FileType {
-    BANK_STATEMENT = "bank_statement",
-    STIP = "stipulation",
-    APPLICATION_FORM = "application_form",
-    MERCHANT_AGREEMENT = "merchant_agreement",
-    SECURITY_AGREEMENT = "security_agreement",
-    CONTRACT_INFO = "contract_info",
-    COJ = "coj", // certificate_of_judjement
-    ACH_AUTHORIZATION = "ach_authorize",
+    IMAGE = "image",
 }
 
 const types: string[] = _.values(FileType);

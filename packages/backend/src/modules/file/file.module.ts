@@ -1,17 +1,17 @@
-import { Module, MiddlewaresConsumer, NestModule, Inject } from "@nestjs/common";
+import { Module, MiddlewareConsumer, NestModule, Inject } from "@nestjs/common";
 
 import { DbModule } from "../db";
 import { AuthModule } from "../auth";
+import { ConfigModule } from "../config";
 import { fileProviders } from "./file.providers";
 import { FileController } from "./file.controller";
 import { register as registerTypeMappings } from "./file.type-mappings";
 import { SharedModule, TypeMapperDiToken, TypeMapper } from "../shared";
-import { ConfigModule } from "../config";
 
 
 @Module({
-    imports: [DbModule, ConfigModule, AuthModule, SharedModule],
-    components: [...fileProviders],
+    imports: [DbModule, AuthModule, SharedModule, ConfigModule],
+    providers: [...fileProviders],
     exports: [...fileProviders],
     controllers: [FileController],
 })
@@ -22,7 +22,7 @@ export class FileModule implements NestModule {
         registerTypeMappings(mapper);
     }
 
-    public configure(consumer: MiddlewaresConsumer): void | MiddlewaresConsumer {
+    public configure(consumer: MiddlewareConsumer): void | MiddlewareConsumer {
 
     }
 }

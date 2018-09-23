@@ -1,15 +1,15 @@
-import { Module, MiddlewaresConsumer, NestModule, Inject } from "@nestjs/common";
+import { Module, MiddlewareConsumer, NestModule, Inject } from "@nestjs/common";
 
 import { DbModule } from "../db";
 import { contactProviders } from "./contact.providers";
-import { TypeMapperModule, TypeMapperDiToken, TypeMapper, SharedModule } from "../shared";
 import { ContactController } from "./contact.controller";
 import { register as registerTypeMappings } from "./contact.type-mappings";
+import { TypeMapperDiToken, TypeMapper, SharedModule } from "../shared";
 
 
 @Module({
     imports: [DbModule, SharedModule],
-    components: [...contactProviders],
+    providers: [...contactProviders],
     exports: [...contactProviders],
     controllers: [ContactController],
 })
@@ -20,7 +20,7 @@ export class ContactModule implements NestModule {
         registerTypeMappings(mapper);
     }
 
-    public configure(consumer: MiddlewaresConsumer): void | MiddlewaresConsumer {
+    public configure(consumer: MiddlewareConsumer): void | MiddlewareConsumer {
 
     }
 }

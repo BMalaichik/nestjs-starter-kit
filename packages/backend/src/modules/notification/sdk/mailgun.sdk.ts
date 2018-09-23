@@ -1,12 +1,11 @@
-import { Component, Inject } from "@nestjs/common";
+import { Injectable, Inject } from "@nestjs/common";
 
 import * as mailgun from "mailgun-js";
 import * as Bluebird from "bluebird";
-
 import { Config, ConfigDiToken } from "../../config";
 
 
-@Component()
+@Injectable()
 export class MailgunSdk {
 
     private client;
@@ -14,10 +13,16 @@ export class MailgunSdk {
     public constructor(
         @Inject(ConfigDiToken.CONFIG) private readonly config: Config,
     ) {
-        this.client = mailgun({ apiKey: config.mailgun.apiKey, domain: config.mailgun.domain });
+        if (config.mailgun) {
+            this.client = mailgun(config.mailgun);
+        }
     }
 
     public async message(data: any): Promise<void> {
+        if (!this.client) {
+            throw new Error(`Mailgun config is not defined`);
+        }
+
         const context = this.client.messages();
 
         await (Bluebird.promisify(context.send, { context }) as any)(data);

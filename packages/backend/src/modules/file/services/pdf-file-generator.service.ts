@@ -1,4 +1,4 @@
-import { Component, Inject } from "@nestjs/common";
+import { Injectable, Inject } from "@nestjs/common";
 
 import * as fs from "fs";
 import * as pdfGenerator from "html-pdf";
@@ -13,7 +13,7 @@ import { PdfFileTemplateNotResolvedException } from "../exceptions";
 import { FileService, FileDiToken, FileDto, FileParams } from "..";
 
 
-@Component()
+@Injectable()
 export class PdfFileGeneratorService extends BaseService {
 
     public constructor(
@@ -24,11 +24,33 @@ export class PdfFileGeneratorService extends BaseService {
         super();
     }
 
+    /**
+     *  Returns generated file Buffer
+     *
+     */
+    public async generateBuffer({ templateName, data }: { templateName: string, data: any }): Promise<Buffer> {
+        try {
+            const template: string = await this.getTemplate(templateName);
+            const renderedTemplate = this.renderer.render(template, data);
+            const context = pdfGenerator.create(renderedTemplate, this.getBasePdfOptions());
+
+            return await promisify(context.toBuffer, { context })();
+        } catch (err) {
+            this.logger.error(err);
+
+            throw new PdfFileGenerationException();
+        }
+    }
+
+    /**
+     *  Streams generated pdf file to the storage & store in db file record
+     *
+     */
     public async generate({ templateName, data, params }: { templateName: string, data: any, params: FileParams }): Promise<FileDto> {
         try {
             const template: string = await this.getTemplate(templateName);
             const renderedTemplate = this.renderer.render(template, data);
-            const context = pdfGenerator.create(renderedTemplate, { format: "A4", type: "pdf" });
+            const context = pdfGenerator.create(renderedTemplate, this.getBasePdfOptions());
             const readStream: fs.ReadStream = await promisify(context.toStream, { context })();
             const file: FileDto = await this.fileService.multipartUpload(readStream, params);
 
@@ -49,5 +71,16 @@ export class PdfFileGeneratorService extends BaseService {
 
             throw new PdfFileTemplateNotResolvedException(name);
         }
+    }
+
+    private getBasePdfOptions(): any {
+        return {
+            format: "A4", type: "pdf", border: {
+                top: "20px",
+                right: "10px",
+                bottom: "20px",
+                left: "10px",
+            },
+        };
     }
 }

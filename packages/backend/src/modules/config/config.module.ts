@@ -1,15 +1,15 @@
-import { Module, NestModule, MiddlewaresConsumer, Global } from "@nestjs/common";
+import { Module, NestModule, MiddlewareConsumer } from "@nestjs/common";
 
 import { configProviders } from "./config.providers";
+import { CipherModule } from "../shared/cipher";
 
-
-@Global()
 @Module({
-    components: [...configProviders],
-    exports: [...configProviders],
+    imports: [CipherModule],
+    providers: [...configProviders],
+    exports: [...configProviders, CipherModule],
 })
 export class ConfigModule implements NestModule {
-    public configure(consumer: MiddlewaresConsumer): void | MiddlewaresConsumer {
+    public configure(consumer: MiddlewareConsumer): void | MiddlewareConsumer {
 
     }
 }

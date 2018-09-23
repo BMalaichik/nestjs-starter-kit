@@ -1,40 +1,42 @@
-import { Module, NestModule, MiddlewaresConsumer, Inject, RequestMethod, forwardRef } from "@nestjs/common";
+import { Module, NestModule, MiddlewareConsumer, Inject, RequestMethod } from "@nestjs/common";
 
 import { DbModule } from "./modules/db";
+import { FileModule } from "./modules/file";
+import { CronModule } from "./modules/cron";
 import { UserModule } from "./modules/user";
 import { AuthModule } from "./modules/auth";
+import { CipherModule } from "./modules/shared/cipher";
 import { GlobalModule } from "./modules/global";
 import { SharedModule } from "./modules/shared";
+import { LoggerModule } from "./modules/logger";
 import { AppController } from "./app.controller";
 import { RequestMiddleware } from "./http/middlewares/request.middleware";
 import { NotificationModule } from "./modules/notification";
 import { Config, ConfigModule, ConfigDiToken } from "./modules/config";
-import { FileModule } from "./modules/file";
-import { LoggerModule } from "./modules/logger";
-import { ContactModule } from "./modules/contact";
 
 
 @Module({
-  imports: [
-      DbModule,
-      AuthModule,
-      UserModule,
-      GlobalModule,
-      ConfigModule,
-      NotificationModule,
-      FileModule,
-      SharedModule,
-      LoggerModule,
-      ContactModule,
+    imports: [
+        CipherModule,
+        ConfigModule,
+        SharedModule,
+        DbModule,
+        AuthModule,
+        UserModule,
+        GlobalModule,
+        NotificationModule,
+        FileModule,
+        LoggerModule,
+        CronModule,
     ],
-  controllers: [AppController],
-  components: [],
+    controllers: [AppController],
+    providers: [],
 })
 export class ApplicationModule implements NestModule {
     public constructor(
         @Inject(ConfigDiToken.CONFIG) private readonly config: Config,
     ) {}
-    public configure(consumer: MiddlewaresConsumer): void {
+    public configure(consumer: MiddlewareConsumer): void {
         if (this.config.app.logRequests) {
             consumer
                 .apply(RequestMiddleware)

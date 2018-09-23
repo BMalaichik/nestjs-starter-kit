@@ -53,7 +53,7 @@ export abstract class BaseService {
     public async destroyBy<T extends BaseDto>(repository, attributeValue: string | number, matchField = "id"): Promise<void> {
         const deletedAmount: number = await repository.destroy({ where: { [matchField]: attributeValue }, limit: 1 });
 
-        if (deletedAmount !== 1) {
+        if (matchField === "id" && deletedAmount !== 1) {
             throw new EntityNotFoundException(`${repository.name}`);
         }
     }

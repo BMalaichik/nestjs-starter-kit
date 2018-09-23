@@ -1,7 +1,4 @@
-import { InternalServerErrorException } from "@nestjs/common";
-
-
-export class TypeMapperException extends InternalServerErrorException {
+export class TypeMapperException extends Error {
     constructor(msg: string) {
         super(msg);
       }

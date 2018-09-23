@@ -1,4 +1,4 @@
-import { Component, Inject } from "@nestjs/common";
+import { Injectable, Inject } from "@nestjs/common";
 
 import * as _ from "lodash";
 
@@ -12,7 +12,7 @@ export interface EmailPayload {
     text: string;
 }
 
-@Component()
+@Injectable()
 export class EmailNotificationService {
 
     private readonly sender: string = "info@app.biz";

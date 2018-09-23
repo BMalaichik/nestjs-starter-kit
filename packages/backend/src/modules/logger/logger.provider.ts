@@ -4,7 +4,7 @@ import { LoggerDiToken } from "./logger.di";
 import { LoggerService } from "./logger.service";
 import { ConfigDiToken, Config } from "../config";
 
-
+// TODO: define logger-factory, using pino.child with extra property add
 export const loggerProviders = [
     {
         provide: LoggerDiToken.LOGGER,

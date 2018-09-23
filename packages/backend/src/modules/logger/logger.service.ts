@@ -1,9 +1,9 @@
-import { LoggerService as NestLoggerService, Component } from "@nestjs/common";
+import { LoggerService as NestLoggerService, Injectable } from "@nestjs/common";
 
 import * as pino from "pino";
 
 
-@Component()
+@Injectable()
 export class LoggerService implements NestLoggerService {
     private logger: pino.BaseLogger;
 

@@ -1,4 +1,4 @@
-import { createRouteParamDecorator } from "@nestjs/common";
+import { createParamDecorator } from "@nestjs/common";
 
 
-export const UserData = createRouteParamDecorator((req, res) => req.user);
+export const UserData = createParamDecorator((req, res) => req.user);

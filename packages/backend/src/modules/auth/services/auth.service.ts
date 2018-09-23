@@ -1,4 +1,4 @@
-import { Inject, Component, ForbiddenException } from "@nestjs/common";
+import { Inject, ForbiddenException, Injectable } from "@nestjs/common";
 
 import * as _ from "lodash";
 import * as jwt from "jsonwebtoken";
@@ -8,9 +8,10 @@ import { PasswordService } from "./password.service";
 import { ConfigDiToken, Config } from "../../config";
 import { UserLoginDto, JwtUserData } from "../auth.interfaces";
 import { UserDiToken, UserService, UserDto } from "../../user";
+import { LoggerDiToken, LoggerService } from "../../logger";
 
 
-@Component()
+@Injectable()
 export class AuthService {
     public static SECRET: string;
 
@@ -18,14 +19,19 @@ export class AuthService {
         @Inject(ConfigDiToken.CONFIG) private readonly config: Config,
         @Inject(UserDiToken.USER_SERVICE) private readonly userService: UserService,
         @Inject(AuthDiToken.PASSWORD_SERVICE) private readonly passwordService: PasswordService,
+        @Inject(LoggerDiToken.LOGGER) private readonly logger: LoggerService,
     ) {
         AuthService.SECRET = this.config.auth.tokenSecret;
     }
 
     public async login(userInfo: UserLoginDto): Promise<{ token: string }> {
-        const user: UserDto = await this.userService.getByEmail(userInfo.email);
+        let user: UserDto;
+        try {
+            // TODO: apply filter. any error -> forbidden
+            user = await this.userService.getByEmail(userInfo.email);
+        } catch (err) {
+            this.logger.error(err);
 
-        if (!user || !user.isActive) {
             throw new ForbiddenException();
         }
 

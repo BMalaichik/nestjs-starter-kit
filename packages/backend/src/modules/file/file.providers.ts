@@ -1,8 +1,8 @@
 import { s3Factory } from "./storage/s3";
 import { FileDiToken } from "./file.di";
-import { PdfFileGeneratorService, FileService } from "./services";
 import { S3FileStorage } from "./storage/file-storage";
 import { S3FileStorageConfigurationFactory } from "./storage";
+import { PdfFileGeneratorService, FileService } from "./services";
 
 
 export const fileProviders = [

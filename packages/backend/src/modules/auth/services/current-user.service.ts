@@ -1,4 +1,4 @@
-import { Component } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 
 import { JwtUserData } from "../auth.interfaces";
 import { getNamespace } from "../../shared/cls";
@@ -6,7 +6,7 @@ import { getNamespace } from "../../shared/cls";
 
 const USER_CLS_KEY = "user";
 
-@Component()
+@Injectable()
 export class CurrentUserService {
 
     public get(): JwtUserData | null {

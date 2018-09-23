@@ -1,18 +1,17 @@
-import { Module, MiddlewaresConsumer, NestModule } from "@nestjs/common";
+import { Module, MiddlewareConsumer, NestModule } from "@nestjs/common";
 
-import { notificationProviders } from "./notification.providers";
-import { NotificationController } from "./notification.controller";
 import { ConfigModule } from "../config";
+import { notificationProviders } from "./notification.providers";
 
 
 @Module({
     imports: [ConfigModule],
-    components: [...notificationProviders],
+    providers: [...notificationProviders],
     exports: [...notificationProviders],
-    controllers: [NotificationController],
+    controllers: [],
 })
 export class NotificationModule implements NestModule {
-    public configure(consumer: MiddlewaresConsumer): void | MiddlewaresConsumer {
+    public configure(consumer: MiddlewareConsumer): void | MiddlewareConsumer {
 
     }
 }

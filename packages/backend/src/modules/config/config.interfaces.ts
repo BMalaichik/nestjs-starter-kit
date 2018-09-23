@@ -5,7 +5,7 @@ export interface Config {
         username: string;
         password: string;
         dialect: string;
-        port: number,
+        port: string,
         database: string,
         logging?: any,
     };

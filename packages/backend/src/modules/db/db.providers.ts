@@ -1,12 +1,12 @@
 import { Sequelize } from "sequelize-typescript";
 
-import { init } from "./seeder";
 import { DbDiToken } from "./db.di";
 import { Config, ConfigDiToken } from "../config";
 import {
     User,
     Contact,
     File,
+    TimeBasedEvent,
 } from "./entities";
 
 
@@ -23,6 +23,10 @@ const repositoryProviders = [
         provide: DbDiToken.FILE_REPOSITORY,
         useValue: File,
     },
+    {
+        provide: DbDiToken.TIME_BASED_EVENT_REPOSITORY,
+        useValue: TimeBasedEvent,
+    },
 ];
 
 export const dbProviders = [
@@ -35,12 +39,12 @@ export const dbProviders = [
                 [
                     Contact,
                     User,
-                    File
+                    File,
+                    TimeBasedEvent,
                 ],
             );
 
-            await sequelize.sync({ force: true });
-            await init();
+            await sequelize.sync();
 
             return sequelize;
         },

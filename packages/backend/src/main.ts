@@ -6,9 +6,8 @@ import { INestApplication } from "@nestjs/common";
 import * as helmet from "helmet";
 
 import { getNamespace } from "./modules/shared/cls";
-import { ValidationFilter } from "./modules/db";
 import { ApplicationModule } from "./app.module";
-import { GlobalExceptionFilter, HttpExceptionFilter } from "./http/filters";
+import { GlobalExceptionFilter } from "./http/filters";
 import { LoggerDiToken, LoggerService, LoggerModule } from "./modules/logger";
 
 
@@ -24,8 +23,6 @@ async function bootstrap() {
     app.disable("etag");
 
     app.useGlobalFilters(
-            new HttpExceptionFilter(logger),
-            new ValidationFilter(),
             new GlobalExceptionFilter(logger),
     );
     app.setGlobalPrefix("/api");

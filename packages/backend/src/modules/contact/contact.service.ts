@@ -1,5 +1,5 @@
 import * as _ from "lodash";
-import { Component, Inject } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 
 
 import { ContactDto } from "./contact.dto";
@@ -11,7 +11,7 @@ import { EntityNotFoundException, InvalidArgumentException } from "../../http/ex
 import { TypeMapperDiToken, TypeMapper } from "../shared";
 
 
-@Component()
+@Injectable()
 export class ContactService extends BaseService {
 
     public constructor(
@@ -47,24 +47,17 @@ export class ContactService extends BaseService {
         return super.multipleDestroyBy(this.repository, ids);
     }
 
+    public async getById(id: number): Promise<ContactDto> {
+        const contact: Contact = (await this.repository.findById(id)).toJSON();
+
+        return this.typeMapper.map(Contact, ContactDto, contact);
+    }
+
     public async update(contact: ContactDto): Promise<ContactDto> {
-        const updateOptions: UpdateOptions = { where: { id: contact.id }, limit: 1, returning: true };
-        const [updatedAmount, updatedRecords] = await this.repository.update(contact, updateOptions);
+        const result: Contact = await super.updateBy<Contact>(this.repository, Contact, contact, "id", true) as Contact;
 
-        if (updatedAmount !== 1) {
-            throw new EntityNotFoundException("Contact", contact.id);
-        }
-
-        const [updatedContact] = updatedRecords;
-
-        return this.typeMapper.map(Contact, ContactDto, updatedContact);
+        return this.typeMapper.map(Contact, ContactDto, result);
     }
 
-    public map2Dto(contact: Contact): ContactDto {
-        return new ContactDto(contact);
-    }
 
-    public map2Entity(contact: ContactDto): Contact {
-        return new Contact({ ...contact });
-    }
 }

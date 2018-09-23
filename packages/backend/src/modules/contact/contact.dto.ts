@@ -1,6 +1,24 @@
-import { BaseDto } from "../../base.dto";
-import { Contact } from "../db";
+import * as _ from "lodash";
 
+import { BaseDto } from "../../base.dto";
+
+
+/**
+ *  Returns safe parsed first & last name
+ */
+export function splitFullNameSafe(fullName: string = "", defaultValue: string = ""): string[] {
+    const firstLastNameSplit: string[] = fullName.split(/\s+/g);
+    const [firstName, lastName] = [_.dropRight(firstLastNameSplit).join(" "), _.last(firstLastNameSplit)];
+
+    return [
+        firstName || defaultValue,
+        lastName || defaultValue,
+    ];
+}
+
+export function getFullNameSafe(firstName: string = "", lastName: string = "") {
+    return _.trim(`${firstName || ""} ${lastName || ""}`);
+}
 
 export class ContactDto extends BaseDto {
     public id: number;
@@ -9,6 +27,7 @@ export class ContactDto extends BaseDto {
     public home: string;
     public fax: string;
     public email: string;
+    public name: string;
     public firstName: string;
     public dateOfBirth: string;
     public title: string;

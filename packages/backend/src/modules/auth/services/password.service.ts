@@ -1,4 +1,4 @@
-import { Component } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 
 import * as crypto from "bcrypt";
 import { generate } from "generate-password";
@@ -6,7 +6,7 @@ import { generate } from "generate-password";
 import { InvalidPasswordException } from "../exceptions";
 
 
-@Component()
+@Injectable()
 export class PasswordService {
 
     public async generate(): Promise<string> {

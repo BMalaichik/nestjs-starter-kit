@@ -1,4 +1,4 @@
-import { Module, NestModule, MiddlewaresConsumer, RequestMethod, forwardRef, Inject } from "@nestjs/common";
+import { Module, NestModule, MiddlewareConsumer, RequestMethod, forwardRef, Inject } from "@nestjs/common";
 
 import { DbModule } from "../db";
 import { UserModule } from "../user";
@@ -13,7 +13,7 @@ import { CurrentUserService } from "./services";
 
 @Module({
     imports: [ConfigModule, DbModule, forwardRef(() => UserModule) ],
-    components: [JwtStrategy, ...authProviders],
+    providers: [JwtStrategy, ...authProviders],
     exports: [...authProviders],
     controllers: [AuthController],
 })
@@ -23,7 +23,7 @@ export class AuthModule implements NestModule {
     ) {
 
     }
-    public configure(consumer: MiddlewaresConsumer): void | MiddlewaresConsumer {
+    public configure(consumer: MiddlewareConsumer): void | MiddlewareConsumer {
         consumer
             .apply(AuthMiddleware)
             .with(this.currentUserService)
