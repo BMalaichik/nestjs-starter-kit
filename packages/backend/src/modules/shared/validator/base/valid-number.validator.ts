@@ -14,7 +14,7 @@ export class ValidNumberValidator implements Validator {
         },
     ) { }
     public validate(value: any): void {
-        const valueToValidate = this.opts.valueProperty ? value[this.opts.valueProperty] : value;
+        const valueToValidate = this.opts.valueProperty ? _.get(value, this.opts.valueProperty) : value;
 
         if (
             !_.isNumber(valueToValidate)

@@ -10,7 +10,7 @@ export class SampleAsynclValidator implements AsyncValidator {
         protected message?: string,
     ) {}
     public async validate(value: any): Promise<void> {
-        const valueToValidate = this.valueProperty ? value[this.valueProperty] : value;
+        const valueToValidate = this.valueProperty ? _.get(value, this.valueProperty) : value;
 
         if (_.isNil(valueToValidate)) {
             throw new ValidationError(this.message || `${_.upperFirst(this.field)} must be set`);

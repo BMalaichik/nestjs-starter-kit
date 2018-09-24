@@ -1,6 +1,7 @@
 import * as _ from "lodash";
 import * as Bluebird from "bluebird";
 
+import { ValidationException } from "../../../http/exceptions";
 import { ValidationOptions, ValidationResult, ValidationCb, Validator, ValidationError, AsyncValidator } from "./types";
 
 
@@ -64,17 +65,11 @@ export class ValidatorService {
         };
     }
 
-    public static reduceErrorResponse(errors: ValidationResult): ValidationError {
-        const message: string = _.map(errors as ValidationError[], "message").join("\n");
-
-        return new ValidationError(message);
-    }
-
     private static handleError(errors: ValidationError[], err: any, validator: Validator) {
         if (err instanceof ValidationError) {
             errors.push(err);
         } else {
-            const msg: string = `Validation failed. Validator: ${_.get(validator, "constructor.name")}. Error: ${err}`;
+            const msg: string = `${_.get(validator, "constructor.name")} validation failed. Error: ${err}`;
             errors.push(new ValidationError(msg));
         }
     }
@@ -82,7 +77,7 @@ export class ValidatorService {
     private static handleResponse(errors: ValidationError[], opts: ValidationOptions): ValidationResult {
         if (!!errors.length) {
             if (opts.failOnError) {
-                throw errors;
+                throw new ValidationException(_.map(errors, e => e.message).join(". "));
             }
 
             return errors;
