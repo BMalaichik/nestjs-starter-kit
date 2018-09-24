@@ -1,4 +1,4 @@
-import {PRODUCT_TYPE, UNIT_TYPE} from "../entities";
+import {UNIT_TYPE} from "../entities";
 
 export const products = [
     {
@@ -8,7 +8,7 @@ export const products = [
         unit_type: UNIT_TYPE.L,
         is_deleted: false,
         shop_id: 1,
-        type: PRODUCT_TYPE.INGREDIENT,
+        category_id: 1,
         native_price: 100
     }, {
         name: "Ingredient 2",
@@ -16,7 +16,8 @@ export const products = [
         available: 100,
         unit_type: UNIT_TYPE.KG,
         is_deleted: false,
-        type: PRODUCT_TYPE.INGREDIENT,
+        category_id: 1,
+        shop_id: 1,
         native_price: 100
     }, {
         name: "Product 1",
@@ -24,7 +25,7 @@ export const products = [
         available: 10,
         unit_type: UNIT_TYPE.UNIT,
         is_deleted: false,
-        type: PRODUCT_TYPE.SELL_PRODUCT,
+        category_id: 2,
         native_price: 100,
         sell_price: 200
     },

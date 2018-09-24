@@ -7,7 +7,7 @@ import {
     User,
     Contact,
     File,
-    Product
+    Product, Category, Shop
 } from "./entities";
 
 
@@ -25,7 +25,15 @@ const repositoryProviders = [
         useValue: File,
     },
     {
-        provide: DbDiToken.PRODUCTS_REPOSITORY,
+        provide: DbDiToken.SHOP_REPOSITORY,
+        useValue: Shop,
+    },
+    {
+        provide: DbDiToken.CATEGORY_REPOSITORY,
+        useValue: Category,
+    },
+    {
+        provide: DbDiToken.PRODUCT_REPOSITORY,
         useValue: Product,
     },
 ];
@@ -41,11 +49,12 @@ export const dbProviders = [
                     Contact,
                     User,
                     File,
-                    Product
+                    Shop,
+                    Category,
+                    Product,
                 ],
             );
-
-            await sequelize.sync({ force: true });
+            await sequelize.sync({force: true});
             await init();
 
             return sequelize;

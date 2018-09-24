@@ -1,4 +1,3 @@
-import * as _ from "lodash";
 import { Model, Table, Column, DataType, UpdatedAt, CreatedAt } from "sequelize-typescript";
 
 

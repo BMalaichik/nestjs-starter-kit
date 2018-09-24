@@ -13,6 +13,7 @@ import { FileModule } from "./modules/file";
 import { LoggerModule } from "./modules/logger";
 import { ContactModule } from "./modules/contact";
 import { ProductModule } from "./modules/product";
+import {CategoryModule} from "./modules/category";
 
 
 @Module({
@@ -27,7 +28,8 @@ import { ProductModule } from "./modules/product";
       SharedModule,
       LoggerModule,
       ContactModule,
-      ProductModule
+      ProductModule,
+      CategoryModule
     ],
   controllers: [AppController],
   components: [],

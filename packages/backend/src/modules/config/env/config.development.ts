@@ -8,7 +8,7 @@ const config: Config = {
         port: 5432,
         dialect: "postgres",
         database: "app",
-        logging: false,
+        logging: console.log,
     },
     storage: {
         bucket: "",

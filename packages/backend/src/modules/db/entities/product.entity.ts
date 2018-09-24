@@ -6,8 +6,12 @@ import {
     DataType,
     CreatedAt,
     UpdatedAt,
+    ForeignKey,
+    BelongsTo,
+    Default, HasOne, AllowNull
 } from "sequelize-typescript";
-
+import {Category} from "./category.entity";
+import {Shop} from "./shop.entity";
 
 export enum UNIT_TYPE {
     UNIT = "unit",
@@ -16,22 +20,9 @@ export enum UNIT_TYPE {
     ML = "ml",
     L = "l"
 }
-
-export enum PRODUCT_TYPE {
-    INGREDIENT = "ingredient",
-    SELL_PRODUCT = "sell_product"
-}
-
 const unitTypes = _.values(UNIT_TYPE);
-const productTypes = _.values(PRODUCT_TYPE);
 
 @Table({
-    indexes: [
-        {
-            unique: true,
-            fields: ["id"],
-        },
-    ],
     tableName: "products",
 })
 export class Product extends Model<Product> {
@@ -43,69 +34,56 @@ export class Product extends Model<Product> {
         "available",
         "unit_type",
         "is_deleted",
-        "shop_id",
-        "type",
+        // "shop_id",
+        "category_id",
         "native_price",
         "sell_price"
     ];
 
-    @Column({
-        type: DataType.STRING,
-        allowNull: false
-    })
+    @AllowNull(false)
+    @Column(DataType.STRING)
     name: string;
 
-    @Column({
-        type: DataType.STRING,
-    })
+    @Column(DataType.TEXT)
     description?: string;
 
-    @Column({
-        type: DataType.INTEGER,
-        allowNull: false
-    })
+    @AllowNull(false)
+    @Column(DataType.INTEGER)
     available: number;
 
+    @AllowNull(false)
     @Column({
         type: DataType.ENUM(unitTypes),
         validate: {
             isIn: [unitTypes],
-        },
-        allowNull: false
+        }
     })
     unit_type: UNIT_TYPE;
 
-    @Column({
-        type: DataType.BOOLEAN,
-        defaultValue: () => false
-    })
+    @Default(false)
+    @Column(DataType.BOOLEAN)
     is_deleted: boolean;
 
-    @Column({
-        type: DataType.INTEGER
-    })
-    shop_id?: number;
-
-    @Column({
-        type: DataType.ENUM(productTypes),
-        validate: {
-            isIn: [productTypes],
-        },
-        defaultValue: PRODUCT_TYPE.INGREDIENT,
-        allowNull: false
-    })
-    type: string;
-
-    @Column({
-        type: DataType.FLOAT,
-        allowNull: false
-    })
+    @AllowNull(false)
+    @Column(DataType.FLOAT)
     native_price: number;
 
-    @Column({
-        type: DataType.FLOAT
-    })
+    @Column(DataType.FLOAT)
     sell_price?: number;
+
+    @AllowNull(false)
+    @ForeignKey(() => Category)
+    @Column(DataType.INTEGER)
+    category_id: number;
+    @BelongsTo(() => Category)
+    category: Category;
+
+    @ForeignKey(() => Shop)
+    @Column(DataType.INTEGER)
+    shop_id?: number;
+
+    @BelongsTo(() => Shop)
+    shop: Shop;
 
     @CreatedAt
     created_at?: Date;

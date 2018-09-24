@@ -11,7 +11,7 @@ import { TypeMapperDiToken, TypeMapper } from "../shared";
 export class ProductService extends BaseService {
 
     public constructor(
-        @Inject(DbDiToken.PRODUCTS_REPOSITORY) private readonly repository: typeof Product,
+        @Inject(DbDiToken.PRODUCT_REPOSITORY) private readonly repository: typeof Product,
         @Inject(TypeMapperDiToken.MAPPER) private readonly typeMapper: TypeMapper,
         @Inject(ConfigDiToken.CONFIG) private readonly config: Config
     ) {
