@@ -11,7 +11,7 @@ export class EnumValueValidator<T> implements Validator {
         protected message?: string,
     ) {}
     public validate(value: any): void {
-        const valueToValidate = this.valueProperty ? value[this.valueProperty] : value;
+        const valueToValidate = this.valueProperty ? _.get(value, this.valueProperty) : value;
 
         if (!_.includes(_.values(this.enumObject), valueToValidate )) {
             throw new ValidationError(this.message || `${_.upperFirst(this.field)} must be relevant enumeration item`);
