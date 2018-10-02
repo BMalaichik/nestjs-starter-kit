@@ -25,7 +25,7 @@ async function bootstrap() {
 
     app.useGlobalPipes(new SchemaValidationPipe());
     app.useGlobalFilters(
-            new GlobalExceptionFilter(logger),
+        new GlobalExceptionFilter(logger),
     );
     app.setGlobalPrefix("/api");
     app.enableCors({

@@ -10,6 +10,10 @@ docker-compose.override.yml
 # dependencies
 node_modules
 
+#Documentation folder
+
+documentation
+
 # IDE
 /.idea
 /.awcache
