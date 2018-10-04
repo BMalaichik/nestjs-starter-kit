@@ -4,6 +4,9 @@ import { Injectable, Inject } from "@nestjs/common";
 import { FileDiToken } from "../file.di";
 
 
+/**
+ *  Incapsulates logic of S3 Storage requests. AWS S3 SDK Facade
+ */
 @Injectable()
 export class S3FileStorage {
 

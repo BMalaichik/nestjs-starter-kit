@@ -23,7 +23,9 @@ async function bootstrap() {
     }));
     app.disable("etag");
 
-    app.useGlobalPipes(new SchemaValidationPipe());
+    app.useGlobalPipes(
+        new SchemaValidationPipe(),
+    );
     app.useGlobalFilters(
         new GlobalExceptionFilter(logger),
     );
