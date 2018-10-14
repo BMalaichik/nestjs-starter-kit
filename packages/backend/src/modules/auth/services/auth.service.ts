@@ -104,19 +104,12 @@ export class AuthService {
     }
 
     public async register(user: UserRegistrationDto): Promise<UserDto> {
-        const errors: ValidationError[] = ValidatorService.compose([
-            new NotEmptyValidator("Username", "username"),
-            new NotEmptyValidator("Role", "role"),
+        ValidatorService.compose([
             new NotEmptyValidator("Email", "contact.email"),
             new NotEmptyValidator("Date of Birth", "contact.dateOfBirth"),
-            new NotEmptyValidator("Password", "password"),
-        ], [], { failOnError: false })(user) as ValidationError[];
+        ])(user) as ValidationError[];
 
-        if (!_.isEmpty(errors)) {
-            throw new UserRegistrationException(_.map(errors , e => e.message).join("\n"));
-        }
-
-        // TODO: validate request: password is strong
+        // TODO: move nested objects validation to schem-validator, validate request: password is strong
 
         const passwordHash: string = await this.passwordService.hash(user.password);
         const contact: ContactDto = await this.contactService.create(user.contact);

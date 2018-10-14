@@ -1,5 +1,5 @@
 {
-  "name": "app-backend",
+  "name": "nestjs-starter-kit-backend",
   "version": "1.0.0",
   "private": true,
   "engines": {
@@ -14,7 +14,8 @@
     "test:watch": "npm test -- --watch",
     "start:watch": "nodemon",
     "start:prod": "tsc && node dist/src/main.js",
-    "start:docker": "docker-compose up --build"
+    "start:docker": "docker-compose up --build",
+    "docs:generate": "./node_modules/.bin/compodoc -p tsconfig.json"
   },
   "dependencies": {
     "@nestjs/common": "^5.2.0",
@@ -51,6 +52,7 @@
     "uuid": "^3.3.2"
   },
   "devDependencies": {
+    "@compodoc/compodoc": "^1.1.5",
     "@types/bcrypt": "^2.0.0",
     "@types/bluebird-global": "^3.5.5",
     "@types/helmet": "0.0.38",

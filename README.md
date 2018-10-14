@@ -6,4 +6,8 @@
 - Configured Nginx docker image (basic reverse-proxy setup)
 - PostgreSQL docker image
 
-Precise modules info to be set...
+## Packages documentation
+
+- [Backend](http:bmalaichik.com/starterkit/) - Precise modules information can be found there
+- [DB](https://github.com/BMalaichik/nestjs-starter-kit/blob/master/packages/db/README.md)
+- Nginx - to be defined...

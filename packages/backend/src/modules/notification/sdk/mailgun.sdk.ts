@@ -20,7 +20,8 @@ export class MailgunSdk {
 
     public async message(data: any): Promise<void> {
         if (!this.client) {
-            throw new Error(`Mailgun config is not defined`);
+            console.error(`Mailgun config is not defined`);
+            return;
         }
 
         const context = this.client.messages();

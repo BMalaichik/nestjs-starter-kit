@@ -12,7 +12,11 @@ import { LoggerDiToken, LoggerService } from "../../logger";
 import { PdfFileTemplateNotResolvedException } from "../exceptions";
 import { FileService, FileDiToken, FileDto, FileParams } from "..";
 
-
+/**
+ *  Provides API for generating PDF files.
+ *  Supports generating as internal storing (in-system FileDto class representation) or outputing generated pdf Buffer data
+ *  Provided template names must be kept under `templates` folder.
+ */
 @Injectable()
 export class PdfFileGeneratorService extends BaseService {
 
@@ -25,8 +29,12 @@ export class PdfFileGeneratorService extends BaseService {
     }
 
     /**
-     *  Returns generated file Buffer
-     *
+     *  @param {{ templateName: string, data: any }} request Generate request data.
+     *  @returns {Buffer} Buffer representation on PDF file
+     *  @description Returns generated file Buffer
+     *  @example
+     *  const request = { templateName: "sample.html", data: { username: "John" } };
+     *  const bufferData: Buffer = await this.pdfFileGeneratorService.generateBuffer(request);
      */
     public async generateBuffer({ templateName, data }: { templateName: string, data: any }): Promise<Buffer> {
         try {
@@ -43,8 +51,12 @@ export class PdfFileGeneratorService extends BaseService {
     }
 
     /**
-     *  Streams generated pdf file to the storage & store in db file record
-     *
+     *  @param {{ templateName: string, data: any }} request Generate request data.
+     *  @returns {FileDto} in-system file representation.
+     *  @description Returns in-system file representation of generated PDF. Uploads it to the storage
+     *  @example
+     *  const request = { templateName: "sample.html", data: { username: "John" } };
+     *  const file: FileDto = await this.pdfFileGeneratorService.generate(request);
      */
     public async generate({ templateName, data, params }: { templateName: string, data: any, params: FileParams }): Promise<FileDto> {
         try {
@@ -63,6 +75,9 @@ export class PdfFileGeneratorService extends BaseService {
     }
 
 
+    /**
+     *  @ignore
+     */
     private async getTemplate(name: string): Promise<string> {
         try {
             return (promisify(fs.readFile, { multiArgs: true }) as any)(`${__dirname}/../templates/${name}.html`, "utf-8");
@@ -73,6 +88,9 @@ export class PdfFileGeneratorService extends BaseService {
         }
     }
 
+    /**
+     *  @ignore
+     */
     private getBasePdfOptions(): any {
         return {
             format: "A4", type: "pdf", border: {

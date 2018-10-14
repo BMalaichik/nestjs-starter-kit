@@ -9,6 +9,7 @@ import {
     Put,
     Param,
     ParseIntPipe,
+    ValidationPipe,
 } from "@nestjs/common";
 
 
@@ -19,13 +20,14 @@ import { AuthDiToken } from "./auth.di";
 import { AuthorizeGuard } from "../../http/guards";
 import { UserRegistrationDto } from "./dto";
 import { UserUpdatePasswordDto } from "../user/dto";
+import { ValidationExceptionFilter } from "../../http/filters";
 import { InvalidPasswordExceptionFilter } from "./filters/invalid-password.exception-filter";
 import { UserLoginDto, ResendInviteDto, ResetPasswordDto } from "./auth.interfaces";
 
 
 @Controller("/auth")
 @UseGuards(AuthorizeGuard)
-@UseFilters(InvalidPasswordExceptionFilter)
+@UseFilters(InvalidPasswordExceptionFilter, ValidationExceptionFilter)
 export class AuthController {
 
     public constructor(
@@ -56,7 +58,7 @@ export class AuthController {
     @HttpCode(200)
     @Post("/register")
     @Public()
-    public async register(@Body() data: UserRegistrationDto): Promise<UserDto> {
+    public async register(@Body(new ValidationPipe({ transform: true })) data: UserRegistrationDto): Promise<UserDto> {
         return this.authService.register(data);
     }
 

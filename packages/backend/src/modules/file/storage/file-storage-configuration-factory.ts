@@ -8,6 +8,10 @@ import { PermissionContext } from "../../auth";
 import { ConfigDiToken, Config } from "../../config";
 
 
+/**
+ *  Incapsulates logic of AWS S3 SDK configuration building.
+ *  Refer to [AWS S3 SDK docs](@link https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html)
+ */
 @Injectable()
 export class S3FileStorageConfigurationFactory {
 
@@ -59,19 +63,27 @@ export class S3FileStorageConfigurationFactory {
 
     /**
      *
-     *  Returns storage path: doesn't include filename & upload prefix
+     *  @returns {String} storage path file, only context\type-based. No bucker & filename included.
      */
     public getStoragePath(file: { context: PermissionContext, type: FileType }): string {
         return `${file.type}/`;
     }
 
     /**
-     *  Returns storage key: full bucket path
+     *  @param {String} path file storing path. Only type-definded part of path
+     *  @param {String} originalFilename
+     *  @returns {String} File Storage Key
+     *  @description Generate Storage File Key - full storage file path, including bucket & generated filename.
      */
-    public getKey(path: string, originalFilename: string): string {
+    public generateKey(path: string, originalFilename: string): string {
         return `${this.config.storage.prefix}${path}${this.getFilename(originalFilename)}`;
     }
 
+    /**
+     *  @param {String} originalFilename
+     *  @returns {String} content disposition computed header.
+     *  @description Used to store original file name as part of S3 file metadata
+     */
     public getContentDisposition(originalFilename: string): string {
         return `attachment; filename*=UTF-8''${encodeURIComponent(originalFilename)}`;
     }

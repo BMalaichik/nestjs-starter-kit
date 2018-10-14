@@ -37,6 +37,11 @@ export interface FileParams {
     dealId: number;
 }
 
+/**
+ *  Abstractaion layer of in-system file representation manipulations.
+ *  Files are assumed to be presented in `file` table.
+ *  FileDto - in-system file representation.
+ */
 @Injectable()
 export class FileService extends BaseService {
 
@@ -52,11 +57,17 @@ export class FileService extends BaseService {
     }
 
 
-    public async multipartUpload(readStream: ReadStream, params: FileParams): Promise<any> {
+    /**
+     * @param {ReadStream} readStream  input stream to be piped to the storage
+     * @param {FileParams} params
+     * @returns {FileDto} in-system file representation
+     * @description Method reads from input stream & pipe output to the S3 Storage
+     */
+    public async multipartUpload(readStream: ReadStream, params: FileParams): Promise<FileDto> {
         const passTransformStream = new PassThrough();
         const contextData: PermissionContext = await this.getFileUploadPermissionContext(params);
         const storagePath = this.configFactory.getStoragePath({ context: contextData, type: params.type });
-        const key: string = this.configFactory.getKey(storagePath, params.title);
+        const key: string = this.configFactory.generateKey(storagePath, params.title);
         const config = this.configFactory.getUploadConfiguration(key, passTransformStream, params.name);
         const currentUser: JwtUserData = this.currentUserService.get();
 
@@ -77,7 +88,7 @@ export class FileService extends BaseService {
             throw new CurrentUserNotDefinedException();
         }
 
-        return new Promise((resolve, reject) => {
+        return new Promise<FileDto>((resolve, reject) => {
             const multipartUpload$ = this.storage.upload(config);
 
             readStream.pipe(passTransformStream);
@@ -97,11 +108,16 @@ export class FileService extends BaseService {
         });
     }
 
+    /**
+     *  @param {FileUploadRequestModel} request file data upload request
+     *  @returns {FileDto} in-system file representation
+     *  @description Uploads file to the S3 File Storage, tracking file reference in `file` table
+     */
     public async upload(request: FileUploadRequestModel): Promise<FileDto> {
         const fileOriginalName: string = request.data.originalname;
         const contextData: PermissionContext = await this.getFileUploadPermissionContext(request.file);
         const storagePath: string = this.configFactory.getStoragePath({ context: contextData, type: request.file.type });
-        const key: string = this.configFactory.getKey(storagePath, fileOriginalName);
+        const key: string = this.configFactory.generateKey(storagePath, fileOriginalName);
         const config = this.configFactory.getUploadConfiguration(key, request.data.buffer, fileOriginalName);
         const currentUser: JwtUserData = this.currentUserService.get();
 
@@ -132,6 +148,10 @@ export class FileService extends BaseService {
     }
 
 
+    /**
+     *  @param {Number[]} ids files ids to delete.
+     *  @description Files are removed from `file` table first, then deleted from storage
+     */
     public async multipleDelete(ids: number[]): Promise<void> {
         // 0. validate params
         // 1. find all files based on security context
@@ -157,16 +177,22 @@ export class FileService extends BaseService {
     }
 
     /**
-     *  Updates files records, fields: title, description
+     *  @param {FileDto[]} files files to delete.
      */
     public async multipleUpdate(files: FileDto[]): Promise<FileDto[]> {
         const updatedFiles: File[] = await Promise.map(files, file => {
-            return this.updateBy<File>(this.repository, File, file, "id", true, ["title", "description"]);
+            return this.updateBy<File>(this.repository, File, file as any, "id", true, ["title", "description"]);
         }) as File[];
 
         return _.map(updatedFiles, file => this.typeMapper.map(File, FileDto, file));
     }
 
+    /**
+     *  @param {FileDto} file
+     *  @returns {String} file direct url
+     *  @description Methods returns 15-mins valid direct url.
+     *  Validity duration can be overriten in {@link S3FileStorageConfigurationFactory} `getDownloadConfiguration` method. Refer to AWS S3 SDK docs.
+     */
     public getDirectUrl(file: FileDto): string {
         ValidatorService.compose([
             new NotNilValidator("Key", "key"),
@@ -175,6 +201,9 @@ export class FileService extends BaseService {
         return this.storage.getDirectUrl(this.configFactory.getDownloadConfiguration(file.key));
     }
 
+    /**
+     *  @ignore
+     */
     private validateFile(file: FileDto) {
         ValidatorService.compose([
             new EnumValueValidator<typeof FileType>(FileType, "type", "type"),
@@ -182,6 +211,10 @@ export class FileService extends BaseService {
             new NotNilValidator("name", "name"),
         ])(file);
     }
+
+    /**
+     *  @ignore
+     */
 
     private async getFileUploadPermissionContext(params: { type: FileType; dealId: number }): Promise<PermissionContext> {
         return {};

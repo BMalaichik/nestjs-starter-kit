@@ -7,6 +7,7 @@ import * as helmet from "helmet";
 
 import { getNamespace } from "./modules/shared/cls";
 import { ApplicationModule } from "./app.module";
+import { SchemaValidationPipe } from "./http/pipes";
 import { GlobalExceptionFilter } from "./http/filters";
 import { LoggerDiToken, LoggerService, LoggerModule } from "./modules/logger";
 
@@ -22,8 +23,11 @@ async function bootstrap() {
     }));
     app.disable("etag");
 
+    app.useGlobalPipes(
+        new SchemaValidationPipe(),
+    );
     app.useGlobalFilters(
-            new GlobalExceptionFilter(logger),
+        new GlobalExceptionFilter(logger),
     );
     app.setGlobalPrefix("/api");
     app.enableCors({
