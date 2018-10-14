@@ -8,6 +8,6 @@
 
 ## Packages documentation
 
-- [Backend](http://198.199.84.79/starterkit/) - Precise modules information can be found there
+- [Backend](http:bmalaichik.com/starterkit/) - Precise modules information can be found there
 - [DB](https://github.com/BMalaichik/nestjs-starter-kit/blob/master/packages/db/README.md)
 - Nginx - to be defined...
