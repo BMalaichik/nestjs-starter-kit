@@ -1,11 +1,12 @@
 import * as _ from "lodash";
 import * as nconf from "nconf";
 
+import { Env } from "./config.interfaces";
 import { ConfigDiToken } from "./config.di";
 import { CipherService, CipherDiToken } from "../shared/cipher";
 
-// TODO: extract nto single place, like app/core module
-const env = process.env.NODE_ENV || "development";
+
+const env = process.env.NODE_ENV || Env.DEVELOPMENT;
 
 nconf.use("memory");
 
@@ -29,15 +30,16 @@ export const configProvider = {
     provide: ConfigDiToken.CONFIG,
     useFactory: async (cipherService: CipherService) => {
         const config = nconf.get();
-        const decryptedConfig = _.assign(
-            {},
-            config,
-            {
-                db: await cipherService.decryptObject(config.db),
-            },
-        );
+        const decryptedConfigs = await Promise.map(_.keys(config), async key => {
+            const valueToDecrypt: any = config[key];
+            const decryptedValue = _.isObject(valueToDecrypt) ?
+                await cipherService.decryptObject(valueToDecrypt)
+                : (await cipherService.decryptObject({ value: valueToDecrypt })).value; // wrapping-up non-object config
 
-        return decryptedConfig;
+            return { [key]: decryptedValue };
+        });
+
+        return _.assign({}, ...decryptedConfigs);
     },
     inject: [CipherDiToken.CIPHER_SERVICE],
 };
