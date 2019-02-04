@@ -19,6 +19,10 @@ export abstract class BaseService {
         return [toCreate, toUpdate, toDelete];
     }
 
+    public async exists<T extends BaseDto>(repository, options: WhereOptions<T>): Promise<boolean> {
+        return !!(await repository.findOne({ where: options }));
+    }
+
     public async updateBy<T extends BaseDto>(
         repository,
         model: typeof Model,

@@ -8,9 +8,9 @@ import {
     HttpCode,
 } from "@nestjs/common";
 
-import { AuthorizeGuard } from "../../http/guards";
 import { ContactDiToken } from "./contact.di";
 import { ContactService } from "./contact.service";
+import { AuthorizeGuard } from "../auth/guards";
 
 
 @Controller("/contact")

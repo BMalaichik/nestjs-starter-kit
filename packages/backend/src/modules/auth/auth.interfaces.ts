@@ -1,4 +1,4 @@
-import { UserRole } from "../db";
+import { UserRole, RoleName } from "../db";
 
 
 export interface UserLoginDto {
@@ -18,5 +18,5 @@ export interface JwtUserData {
     id: number;
     email: string;
     name: string;
-    roles: UserRole[];
+    role: { id: number, name: RoleName };
 }

@@ -7,6 +7,9 @@ import {
     Contact,
     File,
     TimeBasedEvent,
+    Role,
+    RolePermission,
+    Permission,
 } from "./entities";
 
 
@@ -14,6 +17,18 @@ const repositoryProviders = [
     {
         provide: DbDiToken.USER_REPOSITORY,
         useValue: User,
+    },
+    {
+        provide: DbDiToken.ROLE_REPOSITORY,
+        useValue: Role,
+    },
+    {
+        provide: DbDiToken.PERMISSION_REPOSITORY,
+        useValue: Permission,
+    },
+    {
+        provide: DbDiToken.ROLE_PERMISSION_REPOSITORY,
+        useValue: RolePermission,
     },
     {
         provide: DbDiToken.CONTACT_REPOSITORY,
@@ -34,9 +49,12 @@ export const dbProviders = [
     {
         provide: DbDiToken.SEQUELIZE_CONNECTION,
         useFactory: async (config: Config) => {
-            const sequelize = new Sequelize(config.db);
+            const sequelize = new Sequelize(config.db as any);
             sequelize.addModels(
                 [
+                    Role,
+                    Permission,
+                    RolePermission,
                     Contact,
                     User,
                     File,

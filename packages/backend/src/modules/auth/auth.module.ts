@@ -9,10 +9,16 @@ import { authProviders } from "./auth.providers";
 import { AuthController } from "./auth.controller";
 import { AuthMiddleware } from "./auth.middleware";
 import { CurrentUserService } from "./services";
+import { PermissionModule } from "./permission";
 
 
 @Module({
-    imports: [ConfigModule, DbModule, forwardRef(() => UserModule) ],
+    imports: [
+        ConfigModule,
+        DbModule,
+        forwardRef(() => UserModule),
+        PermissionModule,
+    ],
     providers: [JwtStrategy, ...authProviders],
     exports: [...authProviders],
     controllers: [AuthController],

@@ -15,11 +15,9 @@ import {
     ValidationPipe,
 } from "@nestjs/common";
 
-import { Roles } from "../../http/decorators";
 import { UserDto } from "./dto";
-import { UserRole } from "../db";
 import { UserDiToken } from "./user.di";
-import { AuthorizeGuard } from "../../http/guards";
+import { AuthorizeGuard } from "../auth/guards";
 import { UserService, UserStatus } from "./user.service";
 
 
@@ -58,7 +56,6 @@ export class UserController {
     }
 
     @Put("/:id/status")
-    @Roles(UserRole.ADMIN)
     public setStatus(@Param("id", new ParseIntPipe()) id: number, @Query("value") status: UserStatus): Promise<void> {
         return this.userService.setStatus(id, status);
     }

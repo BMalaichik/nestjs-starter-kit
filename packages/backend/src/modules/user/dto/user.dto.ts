@@ -1,13 +1,13 @@
 import { BaseDto } from "../../../base.dto";
-import { UserRole } from "../../db";
 import { ContactDto } from "../../contact";
+import { RoleDto } from "../../auth/dto";
 
 
 export class UserDto extends BaseDto {
     id: number;
     isActive?: boolean;
     publicPlacementAgreed?: boolean;
-    role: UserRole;
+    role: RoleDto;
     contactId: number;
     lastLogin: Date;
     username: string;
