@@ -28,6 +28,7 @@ export class Role extends Model<Role> {
     @Column({
         type: DataType.ENUM(roles),
         allowNull: false,
+        unique: true,
         validate: {
             isIn: [roles],
         },

@@ -29,6 +29,7 @@
     "class-validator": "^0.9.1",
     "cls-bluebird": "^2.1.0",
     "cls-hooked": "^4.2.2",
+    "express": "^4.16.4",
     "generate-password": "^1.4.0",
     "helmet": "^3.12.1",
     "html-pdf": "^2.2.0",
@@ -45,6 +46,7 @@
     "pg": "^7.4.1",
     "pino": "^5.0.1",
     "pino-pretty": "^2.0.1",
+    "properties-reader": "0.0.16",
     "reflect-metadata": "0.1.10",
     "rxjs": "6.0.0",
     "sequelize": "^4.37.4",
@@ -55,6 +57,7 @@
   },
   "devDependencies": {
     "@compodoc/compodoc": "^1.1.5",
+    "@nestjs/swagger": "^2.5.1",
     "@types/bcrypt": "^2.0.0",
     "@types/bluebird-global": "^3.5.5",
     "@types/helmet": "0.0.38",

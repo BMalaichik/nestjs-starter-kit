@@ -29,6 +29,7 @@ export class Permission extends Model<Permission> {
         validate: {
             isIn: [permissions],
         },
+        unique: true,
     })
     name: PermissionName;
 

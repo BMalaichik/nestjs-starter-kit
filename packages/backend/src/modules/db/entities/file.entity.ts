@@ -4,14 +4,9 @@ import {
     Table,
     Column,
     DataType,
-    ForeignKey,
     UpdatedAt,
     CreatedAt,
-    BelongsTo,
 } from "sequelize-typescript";
-
-import { User } from "./user.entity";
-import { ForeignKeyOption } from "../utils";
 
 
 export enum FileType {
@@ -60,8 +55,7 @@ export class File extends Model<File> {
     @Column({  allowNull: false })
     name: string;
 
-    @Column({ allowNull: false, onDelete: ForeignKeyOption.CASCADE })
-    @ForeignKey(() => User)
+    @Column({ allowNull: false })
     uploadedByUserId: number;
 
     @Column({
@@ -72,9 +66,6 @@ export class File extends Model<File> {
         departmentId?: number;
         clientId?: number;
     };
-
-    @BelongsTo(() => User)
-    uploadedBy: User;
 
     @CreatedAt
     createdAt?: Date;

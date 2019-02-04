@@ -11,8 +11,9 @@ import {
     HasMany,
 } from "sequelize-typescript";
 
-import { Role } from "./role.entity";
-import { Contact } from "./contact.entity";
+import { Role } from "../role.entity";
+import { Contact } from "../contact.entity";
+import { UserActivity } from "./user-activity.entity";
 
 
 @Table({
@@ -65,6 +66,9 @@ export class User extends Model<User> {
 
     @BelongsTo(() => Contact)
     contact: Contact;
+
+    @HasMany(() => UserActivity)
+    activities: UserActivity[];
 
     @CreatedAt
     createdAt?: Date;

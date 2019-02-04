@@ -10,6 +10,7 @@ import {
     Role,
     RolePermission,
     Permission,
+    UserActivity,
 } from "./entities";
 
 
@@ -17,6 +18,10 @@ const repositoryProviders = [
     {
         provide: DbDiToken.USER_REPOSITORY,
         useValue: User,
+    },
+    {
+        provide: DbDiToken.USER_ACTIVITY_REPOSITORY,
+        useValue: UserActivity,
     },
     {
         provide: DbDiToken.ROLE_REPOSITORY,
@@ -57,6 +62,7 @@ export const dbProviders = [
                     RolePermission,
                     Contact,
                     User,
+                    UserActivity,
                     File,
                     TimeBasedEvent,
                 ],
