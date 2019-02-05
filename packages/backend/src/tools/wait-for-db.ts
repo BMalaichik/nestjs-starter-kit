@@ -5,7 +5,8 @@ import { Sequelize } from "sequelize-typescript";
 
 import { ConfigModule, ConfigDiToken } from "../modules/config";
 
-
+let retriesAmount = 0;
+const RETRY_LIMIT = 5;
 async function bootstrap() {
     const app = await NestFactory.create(ConfigModule);
     const { db } = app.get(ConfigDiToken.CONFIG);
@@ -18,7 +19,9 @@ async function checkConnection(sequelize) {
     try {
         await sequelize.authenticate();
     } catch (err) {
-        if (err.message === "the database system is starting up") {
+        retriesAmount += 1;
+
+        if (retriesAmount < RETRY_LIMIT) {
             await Bluebird.delay(1000);
             await checkConnection(sequelize);
         } else {

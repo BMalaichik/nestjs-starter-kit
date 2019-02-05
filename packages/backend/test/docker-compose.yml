@@ -1,0 +1,12 @@
+version: "2"
+services:
+  db:
+    image: app/db:test
+    container_name: app-db-test
+    build:
+      context: ../../db
+    network_mode: "host"
+    ports:
+     - 5432:5432
+    environment:
+     - APP_PASS=password

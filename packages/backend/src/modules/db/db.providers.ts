@@ -48,25 +48,26 @@ const repositoryProviders = [
         useValue: TimeBasedEvent,
     },
 ];
-
+/**
+ * Models need to be re-exported to be handled by other db consumers (e.g. cli scripts)
+ */
+export const models = [
+    Role,
+    Permission,
+    RolePermission,
+    Contact,
+    User,
+    UserActivity,
+    File,
+    TimeBasedEvent,
+];
 export const dbProviders = [
     ...repositoryProviders,
     {
         provide: DbDiToken.SEQUELIZE_CONNECTION,
         useFactory: async (config: Config) => {
             const sequelize = new Sequelize(config.db as any);
-            sequelize.addModels(
-                [
-                    Role,
-                    Permission,
-                    RolePermission,
-                    Contact,
-                    User,
-                    UserActivity,
-                    File,
-                    TimeBasedEvent,
-                ],
-            );
+            sequelize.addModels(models);
 
             await sequelize.sync();
 

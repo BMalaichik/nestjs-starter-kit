@@ -1,4 +1,4 @@
-{
+ {
   "name": "nestjs-starter-kit-backend",
   "version": "1.0.0",
   "private": true,
@@ -10,11 +10,15 @@
     "precommit": "npm run lint",
     "lint": "tslint -c ./tslint.json -p ./tsconfig.json",
     "start": "node index.js",
-    "test": "cross-env NODE_ENV=test jest --verbose --config test/jest.config.json",
+    "test": "cross-env NODE_ENV=test npm run test:run",
+    "test:run": "npm run launch-test-db && npm run jest:run && npm run terminate-test-db",
+    "jest:run": "jest --runInBand --verbose --forceExit --config test/jest.config.json",
     "test:watch": "npm test -- --watch",
     "start:watch": "nodemon",
     "start:prod": "tsc && node dist/src/main.js",
     "start:docker": "docker-compose up --build",
+    "launch-test-db": "docker-compose -f ./test/docker-compose.yml up -d --force-recreate --build && node ./cli/wait-for-db && node ./cli/reset-db",
+    "terminate-test-db": "docker rm $(docker ps -a -q --filter name=${app-db-test} --format={{.ID}}) --force >> /dev/null",
     "docs:generate": "./node_modules/.bin/compodoc -p tsconfig.json"
   },
   "dependencies": {
@@ -65,7 +69,7 @@
     "@types/jest": "^22.2.3",
     "@types/jsonwebtoken": "^7.2.7",
     "@types/nconf": "0.0.37",
-    "@types/node": "^9.3.0",
+    "@types/node": "^9.6.41",
     "@types/passport-jwt": "^3.0.1",
     "@types/pino": "^4.16.1",
     "cross-env": "^5.1.4",
