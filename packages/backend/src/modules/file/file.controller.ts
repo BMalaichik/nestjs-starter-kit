@@ -16,7 +16,7 @@ import {
 
 import { FileService } from "./services/file.service";
 import { FileDiToken } from "./file.di";
-import { AuthorizeGuard } from "../../http/guards";
+import { AuthorizeGuard } from "../auth/guards";
 import { CurrentUserNotDefinedExceptionFilter } from "../auth/filters";
 
 

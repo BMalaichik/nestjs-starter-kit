@@ -14,12 +14,14 @@
     "outDir": "./dist",
     "rootDir": ".",
     "typeRoots": [
-      "node_modules/@types"
+      "node_modules/@types",
+      "test/*"
     ]
   },
   "include": [
     "src/**/*",
-    "index.js"
+    "index.js",
+    "test/typings.d.ts"
   ],
   "exclude": [
     "node_modules"

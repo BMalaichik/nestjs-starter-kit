@@ -1,6 +1,7 @@
 import { Module, NestModule, MiddlewareConsumer, Inject, RequestMethod } from "@nestjs/common";
 
 import { DbModule } from "./modules/db";
+import { GeoModule } from "./modules/geo";
 import { FileModule } from "./modules/file";
 import { CronModule } from "./modules/cron";
 import { UserModule } from "./modules/user";
@@ -28,6 +29,7 @@ import { Config, ConfigModule, ConfigDiToken } from "./modules/config";
         FileModule,
         LoggerModule,
         CronModule,
+        GeoModule,
     ],
     controllers: [AppController],
     providers: [],

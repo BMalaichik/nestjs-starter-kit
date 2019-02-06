@@ -1,5 +1,5 @@
 import { AuthDiToken } from "./auth.di";
-import { PasswordService, AuthService, PermissionService, CurrentUserService } from "./services";
+import { PasswordService, AuthService, PermissionContextService, CurrentUserService } from "./services";
 
 
 export const authProviders = [
@@ -16,7 +16,7 @@ export const authProviders = [
         useClass: CurrentUserService,
     },
     {
-        provide: AuthDiToken.PERMISSION_SERVICE,
-        useClass: PermissionService,
+        provide: AuthDiToken.PERMISSION_CONTEXT_SERVICE,
+        useClass: PermissionContextService,
     },
 ];

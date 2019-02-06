@@ -6,10 +6,16 @@
         "ignoreCoverageForAllDecorators": true
       }
     },
+    "testEnvironment": "./app-custom-environment.js",
     "transform": {
       "^.+\\.ts?$": "ts-jest"
     },
-    "testRegex": "((spec))\\.(ts)$",
+    "roots": [
+      "../src"
+    ],
+    "globalSetup": "./setup.js",
+    "globalTeardown": "./teardown.js",
+    "testRegex": "(e2e-test|e2e-spec).(ts|tsx|js)$",
     "moduleFileExtensions": [
       "ts",
       "tsx",

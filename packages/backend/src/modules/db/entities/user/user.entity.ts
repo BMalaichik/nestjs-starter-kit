@@ -8,17 +8,13 @@ import {
     BelongsTo,
     CreatedAt,
     UpdatedAt,
+    HasMany,
 } from "sequelize-typescript";
 
-import { Contact } from "./contact.entity";
+import { Role } from "../role.entity";
+import { Contact } from "../contact.entity";
+import { UserActivity } from "./user-activity.entity";
 
-
-export enum UserRole {
-    ADMIN = "admin",
-    MANAGER = "manager",
-}
-
-const roles: string[] = _.values(UserRole);
 
 @Table({
     indexes: [
@@ -32,16 +28,17 @@ const roles: string[] = _.values(UserRole);
 export class User extends Model<User> {
 
     public id: number;
-    public static PUBLIC_ATTRIBUTES: (keyof User)[] = ["role", "isActive"];
+    public static PUBLIC_ATTRIBUTES: (keyof User)[] = ["roleId", "isActive"];
 
+    @ForeignKey(() => Role)
     @Column({
-        type: DataType.ENUM(roles),
+        type: DataType.INTEGER,
         allowNull: false,
-        validate: {
-            isIn: [roles],
-        },
     })
-    role: UserRole;
+    roleId: number;
+
+    @BelongsTo(() => Role)
+    role: Role;
 
     @Column({
         type: DataType.BOOLEAN,
@@ -69,6 +66,9 @@ export class User extends Model<User> {
 
     @BelongsTo(() => Contact)
     contact: Contact;
+
+    @HasMany(() => UserActivity)
+    activities: UserActivity[];
 
     @CreatedAt
     createdAt?: Date;

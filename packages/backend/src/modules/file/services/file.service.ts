@@ -19,7 +19,7 @@ import {
     AuthDiToken,
     PermissionContext,
     CurrentUserService,
-    PermissionService,
+    PermissionContextService,
     CurrentUserNotDefinedException,
 } from "../../auth";
 
@@ -50,7 +50,7 @@ export class FileService extends BaseService {
         @Inject(FileDiToken.FILE_STORAGE_CONFIGURATION_FACTORY) private readonly configFactory: S3FileStorageConfigurationFactory,
         @Inject(DbDiToken.FILE_REPOSITORY) private readonly repository: typeof File,
         @Inject(AuthDiToken.CURRENT_USER_SERVICE) private readonly currentUserService: CurrentUserService,
-        @Inject(AuthDiToken.PERMISSION_SERVICE) private readonly permissionService: PermissionService,
+        @Inject(AuthDiToken.PERMISSION_CONTEXT_SERVICE) private readonly permissionService: PermissionContextService,
         @Inject(TypeMapperDiToken.MAPPER) private readonly typeMapper: TypeMapper,
     ) {
         super();

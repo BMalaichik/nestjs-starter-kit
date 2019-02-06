@@ -6,7 +6,7 @@ import { IFindOptions } from "sequelize-typescript";
 import { UserDto } from "./dto";
 import { BaseService } from "../../base.service";
 import { EntityNotFoundException } from "../../http/exceptions";
-import { DbDiToken, Contact, User } from "../db";
+import { DbDiToken, Contact, User, Role } from "../db";
 import { TypeMapperDiToken, TypeMapper } from "../shared";
 import { ContactDiToken, ContactService } from "../contact";
 import { ValidatorService, EnumValueValidator } from "../shared/validator";
@@ -34,6 +34,10 @@ export class UserService extends BaseService {
                 {
                     model: Contact,
                     as: "contact",
+                },
+                {
+                    model: Role,
+                    as: "role",
                 },
             ],
         };
@@ -82,6 +86,10 @@ export class UserService extends BaseService {
                     model: Contact,
                     as: "contact",
                 },
+                {
+                    model: Role,
+                    as: "role",
+                },
             ],
         });
 
@@ -100,7 +108,11 @@ export class UserService extends BaseService {
                     as: "contact",
                     where: {
                         email,
+                    },
                 },
+                {
+                    model: Role,
+                    as: "role",
                 },
             ],
         });

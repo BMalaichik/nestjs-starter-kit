@@ -1,6 +1,7 @@
 import { Inject, ForbiddenException, Injectable } from "@nestjs/common";
 
 import * as _ from "lodash";
+import { WhereOptions } from "sequelize";
 
 import { File } from "../../db";
 import { BaseService } from "../../../base.service";
@@ -15,7 +16,7 @@ export interface PermissionContext {
 
 
 @Injectable()
-export class PermissionService extends BaseService {
+export class PermissionContextService extends BaseService {
 
     public constructor(
         @Inject(AuthDiToken.CURRENT_USER_SERVICE) private readonly currentUserService: CurrentUserService,

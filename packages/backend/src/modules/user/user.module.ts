@@ -6,6 +6,7 @@ import { ConfigModule } from "../config";
 import { userProviders } from "./user.providers";
 import { ContactModule } from "../contact";
 import { UserController } from "./user.controller";
+import { UserActivityModule } from "./user-activity";
 import { NotificationModule } from "../notification";
 import { register as registerTypeMappings } from "./user.type-mappings";
 import { SharedModule, TypeMapperDiToken, TypeMapper } from "../shared";
@@ -20,6 +21,7 @@ import { SharedModule, TypeMapperDiToken, TypeMapper } from "../shared";
         SharedModule,
         NotificationModule,
         ConfigModule,
+        UserActivityModule,
     ],
     controllers: [UserController],
     providers: [...userProviders],

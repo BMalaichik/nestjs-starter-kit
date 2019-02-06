@@ -2,21 +2,22 @@ import { Inject, Injectable, ForbiddenException, LoggerService, BadRequestExcept
 
 import * as _ from "lodash";
 import * as jwt from "jsonwebtoken";
+import { Op } from "sequelize";
 
+import { RoleName, DbDiToken, Role } from "../../db";
 import { AuthDiToken } from "../auth.di";
 import { LoggerDiToken } from "../../logger";
 import { PasswordService } from "./password.service";
-import { UserRegistrationDto } from "../dto";
+import { CurrentUserService } from "./current-user.service";
+import { UserUpdatePasswordDto } from "../../user/dto";
 import { ConfigDiToken, Config } from "../../config";
 import { EmailNotificationService } from "./../../notification/services/email-notification.service";
-import { UserLoginDto, JwtUserData, ResendInviteDto, ResetPasswordDto } from "../auth.interfaces";
-import { UserRegistrationException } from "../exceptions/user-registration-exception";
+import { UserRegistrationDto, RoleDto } from "../dto";
 import { UserDiToken, UserService, UserDto } from "../../user";
 import { EmailPayload, NotificationDiToken } from "../../notification";
-import { getFullNameSafe, ContactDto, ContactService, ContactDiToken } from "../../contact";
 import { ValidatorService, NotEmptyValidator, ValidationError } from "../../shared/validator";
-import { UserUpdatePasswordDto } from "../../user/dto";
-import { CurrentUserService } from "./current-user.service";
+import { getFullNameSafe, ContactDto, ContactService, ContactDiToken } from "../../contact";
+import { UserLoginDto, JwtUserData, ResendInviteDto, ResetPasswordDto } from "../auth.interfaces";
 
 
 @Injectable()
@@ -26,6 +27,7 @@ export class AuthService {
     public constructor(
         @Inject(ConfigDiToken.CONFIG) private readonly config: Config,
         @Inject(UserDiToken.USER_SERVICE) private readonly userService: UserService,
+        @Inject(DbDiToken.ROLE_REPOSITORY) private readonly rolePerository: typeof Role,
         @Inject(LoggerDiToken.LOGGER) private readonly logger: LoggerService,
         @Inject(AuthDiToken.PASSWORD_SERVICE) private readonly passwordService: PasswordService,
         @Inject(ContactDiToken.CONTACT_SERVICE) private readonly contactService: ContactService,
@@ -37,6 +39,13 @@ export class AuthService {
         if (!AuthService.SECRET) {
             throw new Error(`No token secret specified in the configuration`);
         }
+    }
+
+    public async getRoles(): Promise<RoleDto[]> {
+        return _.map(
+            await this.rolePerository.findAll({ where: { name: { [Op.ne]: RoleName.SUPER_ADMIN } } }),
+            role => role.toJSON(),
+        );
     }
 
     public async updatePassword(id: number, data: UserUpdatePasswordDto): Promise<void> {
@@ -104,18 +113,11 @@ export class AuthService {
     }
 
     public async register(user: UserRegistrationDto): Promise<UserDto> {
-        ValidatorService.compose([
-            new NotEmptyValidator("Email", "contact.email"),
-            new NotEmptyValidator("Date of Birth", "contact.dateOfBirth"),
-        ])(user) as ValidationError[];
-
-        // TODO: move nested objects validation to schem-validator, validate request: password is strong
-
         const passwordHash: string = await this.passwordService.hash(user.password);
         const contact: ContactDto = await this.contactService.create(user.contact);
         const userToCreate = _.assign(
             {},
-            _.pick(user, ["publicPlacementAgreed", "username", "role"]),
+            _.pick(user, ["username", "roleId"]),
             {  isActive: false, passwordHash, contactId: contact.id },
         );
         const createdUser: UserDto = _.assign({}, await this.userService.create(userToCreate as any), { contact });
@@ -190,7 +192,7 @@ export class AuthService {
             id: user.id,
             name: userFullName,
             email: user.contact.email,
-            roles: [user.role],
+            role: { id: user.role.id, name: user.role.name },
         };
 
         return this.generateToken(payload, { expiresIn: tokenExpiration, secret: this.config.auth.tokenSecret });

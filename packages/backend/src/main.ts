@@ -2,6 +2,7 @@ import "bluebird-global";
 
 import { NestFactory } from "@nestjs/core";
 import { INestApplication } from "@nestjs/common";
+import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
 
 import * as helmet from "helmet";
 
@@ -34,6 +35,7 @@ async function bootstrap() {
         origin: "*",
     });
 
+    setupSwagger(app);
     await app.listen(4101);
 }
 bootstrap();
@@ -48,4 +50,17 @@ function setClsMiddleware(app: INestApplication) {
 
         cls.run(() => next());
     });
+}
+
+function setupSwagger(app) {
+    const options = new DocumentBuilder()
+        .setTitle(`NestJS Starter-Kit API`)
+        .setDescription(``)
+        .setVersion(`1.0`)
+        .setBasePath(`/api`)
+        .addBearerAuth()
+        .build();
+
+    const document = SwaggerModule.createDocument(app, options);
+    SwaggerModule.setup(`api/docs`, app, document);
 }

@@ -17,7 +17,12 @@ import { SharedModule, TypeMapperDiToken, TypeMapper } from "../shared";
  *  {@link FileService} - High-level API for inernal file-management
  */
 @Module({
-    imports: [DbModule, AuthModule, SharedModule, ConfigModule],
+    imports: [
+        DbModule,
+        AuthModule,
+        SharedModule,
+        ConfigModule,
+    ],
     providers: [...fileProviders],
     exports: [...fileProviders],
     controllers: [FileController],
