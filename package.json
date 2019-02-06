@@ -8,7 +8,8 @@
   "private": true,
   "dependencies": {
     "cross-env": "^5.1.4",
-    "lerna": "2.11.0"
+    "lerna": "2.11.0",
+    "sequelize-replace-enum-postgres": "^1.5.0"
   },
   "scripts": {
     "precommit": "lerna run precommit",

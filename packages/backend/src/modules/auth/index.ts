@@ -6,3 +6,5 @@ export * from "./auth.interfaces";
 export * from "./services/auth.service";
 export * from "./auth.providers";
 export * from "./auth.module";
+export * from "./dto";
+export * from "./decorators";

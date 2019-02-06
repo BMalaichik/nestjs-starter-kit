@@ -26,7 +26,7 @@ import { AuthService, CurrentUserService } from "./services";
 import { AuthorizeGuard, PermissionWildcard } from "./guards";
 import { PermissionService, PermissionDiToken } from "./permission";
 import { UserLoginDto, ResendInviteDto, ResetPasswordDto } from "./auth.interfaces";
-import { UserRegistrationDto, RoleDto, AclDto, AclDashboardDto } from "./dto";
+import { UserRegistrationDto, RoleDto, AclDto, AclDashboardDto, RolePermissionDto } from "./dto";
 
 
 @Controller("/auth")
@@ -71,6 +71,13 @@ export class AuthController {
     @Authorize()
     public async getRolesACLDashboard(): Promise<AclDashboardDto> {
         return this.permissionService.getACLDashboard();
+    }
+
+    @HttpCode(HttpStatus.NO_CONTENT)
+    @Put("/acl")
+    @Authorize()
+    public async updateRolePermission(@Body() data: RolePermissionDto): Promise<void> {
+        return this.permissionService.updateRolePermission(data);
     }
 
 
