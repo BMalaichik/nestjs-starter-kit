@@ -48,7 +48,7 @@ export class PermissionMigrationDownPayload {
  *              }
  *          }];
  *
- *          return migrator.up({ data }, { transactional: true }); // you can specify your own transaction OR provide option to create new one
+ *          return migrator.up({ data }, { transactional: true }); // you can provide your own transaction OR specify option to create new one
  *      },
  *      down: (queryInterface) => {
  *          const migrator = new PermissionMigrator(queryInterface);
@@ -132,6 +132,9 @@ export class PermissionMigrator {
         transactionOptions.transaction && await transactionOptions.transaction.commit();
     }
 
+    /**
+     *  @returns {String[]} Array of current supported permissions. Resolved from `enum_permission_name` enumveration type.
+     */
     private async getCurrentPermissionList(): Promise<string[]> {
         const data: { unnest: string }[] = await this.queryInterface.sequelize.query(
             `SELECT unnest(enum_range(NULL::enum_permission_name))`,

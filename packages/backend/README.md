@@ -5,23 +5,24 @@
 Application is build on top of *awesome* Node.js entreprise framework [Nest.js](https://nestjs.com/)
 Main idea of this project is to provide set of configurable & reusable *basic-needs* modules, like Authorization\Authentication, Configuration and etc.
 
-## Project structure
-
-```xxx
-|--- cli                            folder contains list of cli scripts located under `src/tools` to be executed.
-|--- scripts                        app-launch\CI\CD related scripts
-|--- test                           Jest Test Runner configuration folder
-|--- src                            source code
-        |
-        |--- http                   set of http-related utilities
-        |--- modules                application modules
-        |--- tools                  helper scripts executed in application (Nest.js) context
+### Project structure
 ```
+.
+├── /.circleci/                                # CircleCI config folder
+|             └──config.yml
+├── /packages/                                 # Application infrastructure packages
+│   ├── /db/                                   # PostgreSQL DB docker package
+│   ├── /nginx/                                # Nginx web server docker package             
+│   ├── /backend/
+|                ├── /cli                      # Application-based CLI scripts
+|                ├── /scripts                  # Deploy & launch scripts
+|                ├── /src                      # Application source code
+|                    ├── /http                 # Set of cross-modules http utilities(pipes, exception filters and etc.)
+|                    ├── /modules              # Application NestJS modules
+|                    ├── /tools                # application-level module tools (for CLI purposes)
 
-### Launch
-
-Application can be launched in Docker & Non-Docker environments.
-Docker configuration can be found in `docker-compose.yml`, `Dockerfile` files.
+└── package.json                # The list of 3rd party libraries and utilities
+```
 
 ### Non-Docker environment requirements
 
@@ -32,3 +33,16 @@ Docker configuration can be found in `docker-compose.yml`, `Dockerfile` files.
 
 - Docker **^16.0**
 - Docker-compose **^2.0**
+
+
+### Launching application
+Application can be launched in Docker & Non-Docker environments.
+Docker configuration can be found in `docker-compose.yml`, `Dockerfile` files.
+
+- Backend
+   - `npm start`
+   - `npm run start:docker`
+- Nginx
+   - `docker-compose up`
+- DB. **NOTE** - by default, launched with `backend` application in dev mode
+   - `docker-compose up`

@@ -5,10 +5,10 @@ import { Op } from "sequelize";
 
 import { BaseService } from "../../../../base.service";
 import { JwtUserData } from "../../auth.interfaces";
+import { PermissionDto } from "../dto";
 import { LoggerDiToken, LoggerService } from "../../../logger";
-import { RolePermissionDto, RoleDto, PermissionDto, AclDto, AclDashboardDto } from "../../dto";
+import { RolePermissionDto, RoleDto, AclDto, AclDashboardDto } from "../../dto";
 import { DbDiToken, Permission, RolePermission, PermissionName, RoleName, Role } from "../../../db";
-
 
 @Injectable()
 export class PermissionService extends BaseService {

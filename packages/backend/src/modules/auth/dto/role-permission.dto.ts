@@ -1,6 +1,6 @@
 import { BaseDto } from "../../../base.dto";
 import { RoleDto } from "./role.dto";
-import { PermissionDto } from "./permission.dto";
+import { PermissionDto } from "../permission";
 
 export class RolePermissionDto extends BaseDto {
     public id: number;
