@@ -7,7 +7,7 @@ import { NotNilValidator, NotEmptyValidator, SampleAsynclValidator } from "./mod
 
 
 @Controller()
-export class AppController {
+export class AppControllerXXXXXX {
 
     public constructor(
         @Inject(ConfigDiToken.CONFIG) private readonly config: Config,
